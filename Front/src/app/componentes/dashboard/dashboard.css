@@ -1,0 +1,30 @@
+.home-container {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.nav-link:hover {
+  background-color: #e9ecef;
+  border-radius: 5px;
+}
+
+.navbar-links button {
+  font-weight: 500;
+}
+
+
+.navbar {
+  height: 40; 
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.navbar .btn {
+  background-color: rgb(201, 17, 17);
+  color: white;
+  font-weight: 500;
+  padding: 4px 12px;
+}
+.navbar .btn:hover {
+  background-color: rgb(236, 22, 22);
+  color: white;
+}
