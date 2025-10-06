@@ -15,16 +15,21 @@ app.use("/api/usuarios", usuarioRoutes);
 // Función para crear usuario master si no existe
 async function crearMaster() {
   try {
-    const existe = await Usuario.findOne({ where: { rol: "master" } });
+    const existe = await Usuario.findOne({ 
+      where: { email: "master@fibra.com" } 
+    });
+    
     if (!existe) {
       const hashedPassword = await bcrypt.hash("TuPasswordMaster123", 10);
       await Usuario.create({
         nombre: "Master",
         apellido: "Admin",
-        password: hashedPassword,
+        dni: "00000000",
+        email: "master@fibra.com",
         telefono: "123456789",
-        direccion: "Casa Admin",
-        rol: "master",
+        id_rol: 1, // Asegúrate de que el rol con id=1 exista en la tabla `roles`
+        password: hashedPassword,
+        estado: true
       });
       console.log("✅ Usuario master creado");
     } else {
@@ -35,11 +40,11 @@ async function crearMaster() {
   }
 }
 
-// Sincronizamos DB y levantamos servidor
-sequelize.sync({ alter: true })
+// Conectamos a la DB y levantamos el servidor (sin sync!)
+sequelize.authenticate()
   .then(async () => {
-    console.log("✅ DB sincronizada");
-    await crearMaster(); // <-- creamos master si hace falta
+    console.log("✅ Conectado a database_final");
+    await crearMaster();
     app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
   })
-  .catch(err => console.error("Error al conectar DB:", err));
+  .catch(err => console.error("❌ Error al conectar con la base de datos:", err));

@@ -1,3 +1,4 @@
+// database.js (versión mejorada)
 import { Sequelize } from "sequelize";
 import config from "./config.js";
 
@@ -7,8 +8,9 @@ const sequelize = new Sequelize(
   config.db.password,
   {
     host: config.db.host,
+    port: process.env.DB_PORT || 3306,
     dialect: config.db.dialect,
-    logging: false, // evita logs pesados en consola
+    logging: false, //Evita logs pesados en la consola
   }
 );
 
