@@ -11,4 +11,3 @@ export const routes: Routes = [
   // opcionalmente, ruta comodín para 404
   { path: 'landing', component: Landing }
 ];
-

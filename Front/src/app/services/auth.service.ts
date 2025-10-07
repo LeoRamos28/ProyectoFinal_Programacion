@@ -11,9 +11,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(nombre: string, password: string): Observable<any> {
-    const body = { nombre, password };
-    return this.http.post(`${this.baseUrl}/login`, body); // POST a /usuarios/login
+  // src/app/services/auth.service.ts (Modificado)
+  
+  // Modificacion para login ingresar email y password
+  login(email: string, password: string): Observable<any> {
+      const body = { email, password }; 
+      return this.http.post(`${this.baseUrl}/login`, body);
   }
 
   setToken(token: string) {
