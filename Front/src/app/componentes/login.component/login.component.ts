@@ -33,6 +33,7 @@ export class LoginComponent {
 
     this.authService.login(nombre, password).subscribe({
       next: (res: any) => {
+            console.log('🔐 Token recibido del backend:', res.token); // 👈 VERIFICACIÓN
         if (res.token) {
           this.authService.setToken(res.token);
           Swal.fire({
