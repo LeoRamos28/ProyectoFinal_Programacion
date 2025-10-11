@@ -22,26 +22,25 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/usuarios", usuarioRoutes);
 
-// FUNCIÓN: GARANTIZAR LA EXISTENCIA DEL ROL ADMIN
+
 async function inicializarRoles() {
     try {
-        const [rolAdmin, created] = await Rol.findOrCreate({
-            where: { id_rol: 1 }, // Busca por ID 1
-            defaults: { 
-                nombre: 'Admin' 
-            }
+        // Asegurar el Rol Master (ID 1)
+        await Rol.findOrCreate({
+            where: { id_rol: 1 },
+            defaults: { nombre: 'Master' }
         });
+        console.log("✅ Rol 'Master' (ID 1) asegurado.");
 
-        if (created) {
-            console.log("✅ Rol 'Admin' (ID 1) creado exitosamente.");
-        } else {
-            if (rolAdmin.nombre !== 'Admin') {
-                console.warn(`⚠️ Advertencia: El id_rol 1 existe con el nombre: ${rolAdmin.nombre}`);
-            }
-            console.log("Rol 'Admin' (ID 1) ya existe.");
-        }
+        // Asegurar el Rol Técnico (ID 3)
+        await Rol.findOrCreate({
+            where: { id_rol: 2 }, 
+            defaults: { nombre: 'Tecnico' }
+        });
+        console.log("✅ Rol 'Tecnico' (ID 2) asegurado.");
+        
     } catch (err) {
-        console.error("❌ Error inicializando roles. Asegúrate de que la tabla 'roles' exista:", err.message);
+        console.error("❌ Error inicializando roles:", err.message);
         throw err;
     }
 }
@@ -61,7 +60,7 @@ async function crearMaster() {
                 dni: "00000000",
                 email: "master@fibra.com",
                 telefono: "123456789",
-                id_rol: 1, // Usa el ID del rol que garantizamos arriba
+                id_rol: 1, 
                 password: hashedPassword,
                 estado: true
             });
