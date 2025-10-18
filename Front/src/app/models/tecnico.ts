@@ -10,7 +10,8 @@ export interface Tecnico {
     estado: boolean; 
     id_rol: number; 
     
-    // necesario al crear tecnicos.
+    // este es el password del tecnico creado
     password?: string; 
     
+    ordenes_pendientes?: number; 
 }

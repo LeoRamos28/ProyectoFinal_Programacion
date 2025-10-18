@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 
+/**
+ * Middleware de Autenticación: Verifica y decodifica el token JWT.
+ * Almacena el payload (id, email, id_rol) en req.usuario.
+ */
 export function verificarToken(req, res, next) {
     // 1. Obtener el token del header Authorization: Bearer <token>
     const token = req.headers["authorization"]?.split(" ")[1];
@@ -19,13 +23,43 @@ export function verificarToken(req, res, next) {
     }
 }
 
-// Middleware opcional: solo master
+// -------------------------------------------------------------
+// MIDDLEWARES DE AUTORIZACIÓN (SOLO ROL ESPECÍFICO)
+// -------------------------------------------------------------
+
+/**
+ * Middleware de Autorización: Permite el acceso solo al rol Master (id_rol = 1).
+ */
 export function soloMaster(req, res, next) {
-    // ⚠️ CRÍTICO: Revisamos el ID numérico del rol, que debe ser 1 (Master)
+    // Revisa el ID numérico del rol (1)
     if (req.usuario && req.usuario.id_rol === 1) {
         next();
     } else {
-        // Devolvemos 403 Forbidden
-        return res.status(403).json({ error: "Acceso solo para master" });
+        return res.status(403).json({ error: "Acceso solo para Master (id_rol = 1)." });
+    }
+}
+
+/**
+ * Middleware de Autorización: Permite el acceso solo al Personal de Atención (id_rol = 3).
+ * Este es el middleware que faltaba y causaba el error.
+ */
+export function esPersonalAtencion(req, res, next) {
+    // Revisa el ID numérico del rol (3)
+    if (req.usuario && req.usuario.id_rol === 3) {
+        next();
+    } else {
+        return res.status(403).json({ error: "Acceso solo para Personal de Atención (id_rol = 3)." });
+    }
+}
+
+/**
+ * Middleware de Autorización: Permite el acceso solo al Técnico (id_rol = 2).
+ */
+export function esTecnico(req, res, next) {
+    // Revisa el ID numérico del rol (2)
+    if (req.usuario && req.usuario.id_rol === 2) {
+        next();
+    } else {
+        return res.status(403).json({ error: "Acceso solo para Técnico (id_rol = 2)." });
     }
 }
