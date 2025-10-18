@@ -17,6 +17,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>Apellido</th>
                         <th>Email</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -25,7 +26,8 @@
                 <tbody>
                     <tr *ngFor="let tecnico of tecnicos">
                         <td>{{ tecnico.id_usuario }}</td>
-                        <td>{{ tecnico.nombre }} {{ tecnico.apellido }}</td>
+                        <td>{{ tecnico.nombre }}</td>
+                        <td>{{ tecnico.apellido }}</td>
                         <td>{{ tecnico.email }}</td>
                         <td>
                             <span class="badge" 

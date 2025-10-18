@@ -2,25 +2,31 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import sequelize from "./config/database.js";
-import usuarioRoutes from "./routes/routes.js";
-import Usuario from "./models/Usuario.js"; 
+import usuarioRoutes from "./routes/usuario.routes.js";
+import clienteRoutes from "./routes/cliente.routes.js";
+import ordenRoutes from "./routes/orden.routes.js";
 import Rol from "./models/Rol.js"; 
+import Usuario from "./models/Usuario.js";
+import Cliente from "./models/Cliente.js";
+import OrdenTrabajo from "./models/OrdenTrabajo.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 1. CONFIGURACIÓN CORS PARA PERMITIR EL FRONTEND (4200)
 const corsOptions = {
-    // Permite solicitudes desde tu frontend
+    // Permite solicitudes desde frontend
     origin: 'http://localhost:4200', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Manejar cookies/headers de autenticación
+    credentials: true, // cookies/headers de autenticación
     optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions)); 
 app.use(express.json());
 app.use("/api/usuarios", usuarioRoutes);
+app.use("/api/clientes", clienteRoutes);
+app.use("/api/ordenes", ordenRoutes);
 
 
 async function inicializarRoles() {
@@ -38,6 +44,13 @@ async function inicializarRoles() {
             defaults: { nombre: 'Tecnico' }
         });
         console.log("✅ Rol 'Tecnico' (ID 2) asegurado.");
+
+         await Rol.findOrCreate({
+            where: { id_rol: 3 }, 
+            defaults: { nombre: 'Atencion Cliente' }
+        });
+        console.log("✅ Rol 'Atencion Cliente' (ID 3) asegurado.");
+
         
     } catch (err) {
         console.error("❌ Error inicializando roles:", err.message);
@@ -45,7 +58,7 @@ async function inicializarRoles() {
     }
 }
 
-// Función para crear usuario master si no existe
+// Funcion para crear usuario master si no existe
 async function crearMaster() {
     try {
         const existe = await Usuario.findOne({ 
@@ -73,7 +86,7 @@ async function crearMaster() {
     }
 }
 
-// Conexion a la DB y levantamos el servidor
+// Conexion a la DB y levantar el servidor
 sequelize.authenticate()
     .then(async () => {
         console.log("✅ Conectado a database_final");
@@ -87,3 +100,12 @@ sequelize.authenticate()
         app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
     })
     .catch(err => console.error("❌ Error al conectar con la base de datos:", err));
+
+
+
+
+
+
+
+
+    
