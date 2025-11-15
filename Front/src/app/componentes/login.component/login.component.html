@@ -8,18 +8,18 @@
 
   <div class="form-card">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Nombre -->
+      <!-- Email -->
       <div>
-        <label for="nombre" class="form-label">Nombre</label>
+        <label for="email" class="form-label">Email</label>
         <input
-          id="nombre"
-          type="text"
-          formControlName="nombre"
-          placeholder="Tu nombre"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="ejemplo@correo.com"
           class="form-input"
         />
-        <div *ngIf="loginForm.get('nombre')?.invalid && loginForm.get('nombre')?.touched" class="error">
-          El nombre es obligatorio.
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+          El email es obligatorio y debe ser válido.
         </div>
       </div>
 

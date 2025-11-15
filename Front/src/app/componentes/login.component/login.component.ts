@@ -21,7 +21,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      nombre: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
@@ -29,9 +29,9 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.invalid) return;
 
-    const { nombre, password } = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
 
-    this.authService.login(nombre, password).subscribe({
+    this.authService.login(email, password).subscribe({
       next: (res: any) => {
             console.log('🔐 Token recibido del backend:', res.token); // 👈 VERIFICACIÓN
         if (res.token) {
