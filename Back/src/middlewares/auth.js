@@ -14,7 +14,8 @@ export function verificarToken(req, res, next) {
     try {
         // 2. Verificar el token y decodificar el payload
         const decoded = jwt.verify(token, config.jwt.secret);
-        
+        console.log('Payload recibido:', decoded); // Debe mostrar id_rol: 1
+
         // 3. Almacenar el payload decodificado (id, email, id_rol) en req.usuario
         req.usuario = decoded; 
         next();
@@ -22,6 +23,7 @@ export function verificarToken(req, res, next) {
         return res.status(401).json({ error: "Token inválido o expirado" });
     }
 }
+
 
 // -------------------------------------------------------------
 // MIDDLEWARES DE AUTORIZACIÓN (SOLO ROL ESPECÍFICO)
@@ -63,3 +65,19 @@ export function esTecnico(req, res, next) {
         return res.status(403).json({ error: "Acceso solo para Técnico (id_rol = 2)." });
     }
 }
+
+// Funciones nuevas para aplicar restricciones segun rol
+export function masterOrAtencion(req, res, next) {
+  if (req.usuario && (req.usuario.id_rol === 1 || req.usuario.id_rol === 3)) {
+    return next();
+  }
+  return res.status(403).json({ error: "Acceso solo para Master o Atención." });
+}
+
+export function masterOrTecnico(req, res, next) {
+  if (req.usuario && (req.usuario.id_rol === 1 || req.usuario.id_rol === 2)) {
+    return next();
+  }
+  return res.status(403).json({ error: "Acceso solo para Master o Técnico." });
+}
+

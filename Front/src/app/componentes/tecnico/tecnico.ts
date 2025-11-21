@@ -30,7 +30,9 @@ export class TecnicoComponent implements OnInit {
     tecnicoSeleccionado: Tecnico | null = null;
     mostrarFormulario: boolean = false;
     errorMessage: string | null = null; //  errores de la API
+    mensaje: string = '';
 
+    
     constructor(private tecnicoService: TecnicoService) { }
 
     ngOnInit(): void {
@@ -89,7 +91,7 @@ export class TecnicoComponent implements OnInit {
                 next: () => {
                     this.mostrarFormulario = false;
                     this.cargarTecnicos(); 
-                    alert('Técnico creado exitosamente.');
+                    this.mensaje = 'Tecnico creado exitosamente.'; // NUEVO
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al crear el técnico: ' + (err.error?.error || 'Verifique los datos (DNI/Email duplicado).');
@@ -107,7 +109,7 @@ export class TecnicoComponent implements OnInit {
                 next: () => {
                     this.mostrarFormulario = false;
                     this.cargarTecnicos(); 
-                    alert('Técnico actualizado exitosamente.');
+                    this.mensaje = 'Tecnico actualizado exitosamente.'; // NUEVO
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al actualizar el técnico: ' + (err.error?.error || 'Verifique los datos.');
@@ -123,7 +125,7 @@ export class TecnicoComponent implements OnInit {
             this.tecnicoService.deleteTecnico(id_usuario).subscribe({
                 next: () => {
                     this.cargarTecnicos(); 
-                    alert('Técnico eliminado exitosamente.');
+                    this.mensaje = 'Personal de atención eliminado exitosamente.'; // NUEVO
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al eliminar el técnico: ' + (err.error?.message || err.message);

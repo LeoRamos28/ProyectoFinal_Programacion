@@ -23,6 +23,7 @@ export class OrdenesTecnicoComponent implements OnInit {
     mostrarModal: boolean = false;
     ordenSeleccionada: OrdenTrabajo | null = null;
     solucion_reclamo: string = '';
+    mensaje: string = '';
 
     constructor(
         private atencionService: AtencionService,
@@ -34,34 +35,37 @@ export class OrdenesTecnicoComponent implements OnInit {
     }
 
     cargarOrdenes(): void {
-        this.isLoading = true;
-        this.errorMessage = '';
-        this.atencionService.getOrdenesAsignadasATecnico().subscribe({
-            next: (data) => {
-                this.ordenes = data;
-                this.isLoading = false;
-            },
-            error: (err) => {
-                this.errorMessage = 'No se pudieron cargar las órdenes. Intente de nuevo.';
-                this.isLoading = false;
-                console.error(err);
-            }
-        });
-    }
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.atencionService.getOrdenesAsignadasATecnico().subscribe({
+        next: (data) => {
+            this.ordenes = data;         // ← solo órdenes del técnico logueado
+            this.isLoading = false;
+        },
+        error: (err) => {
+            this.errorMessage = 'No se pudieron cargar las órdenes. Intente de nuevo.';
+            this.isLoading = false;
+            console.error(err);          // ← útil para revisar detalles del error
+        }
+    });
+}
+
 
     // Metodo para cambiar el estado (Iniciar o Cancelar)
-    cambiarEstado(idOrden: number, nuevoEstado: string): void {
-
-        this.atencionService.actualizarEstadoOrden(idOrden, { estado: nuevoEstado }).subscribe({
-            next: () => {
-                alert(`Estado de la orden #${idOrden} actualizado a ${nuevoEstado}.`);
-                this.cargarOrdenes();
-            },
-            error: (err) => {
-                alert(`Error al cambiar el estado: ${err.error.error || 'Fallo de conexión'}`);
-                console.error(err);
-            }
-        });
+   cambiarEstado(idOrden: number, nuevoEstado: string): void {
+    this.atencionService.actualizarEstadoOrden(idOrden, { estado: nuevoEstado }).subscribe({
+        next: () => {
+        this.mensaje = `Estado de la orden #${idOrden} actualizado a ${this.obtenerNombreEstado(nuevoEstado)}.`;
+        setTimeout(() => this.mensaje = '', 8000);
+        this.cargarOrdenes();
+        },
+        error: (err) => {
+        this.mensaje = `Error al cambiar el estado: ${err.error.error || 'Fallo de conexión'}`;
+        setTimeout(() => this.mensaje = '', 8000);
+        console.error(err);
+        }
+    });
     }
 
     abrirModalFinalizar(orden: OrdenTrabajo): void {
@@ -77,27 +81,29 @@ export class OrdenesTecnicoComponent implements OnInit {
     }
 
     confirmarFinalizar(): void {
-        if (!this.ordenSeleccionada || this.solucion_reclamo.length < 5) {
-            alert('Debe proporcionar una solución (mínimo 5 caracteres).');
-            return;
-        }
-
-        this.atencionService.actualizarEstadoOrden(this.ordenSeleccionada.id_orden, {
-            estado: 'completada',
-            solucion_reclamo: this.solucion_reclamo
-        }).subscribe({
-            next: () => {
-                alert(`Orden #${this.ordenSeleccionada!.id_orden} completada exitosamente.`);
-                this.cerrarModal();
-                this.cargarOrdenes(); 
-            },
-            error: (err) => {
-                alert(`Error al completar la orden: ${err.error.error || 'Fallo de conexión'}`);
-                console.error(err);
-            }
-        });
+    if (!this.ordenSeleccionada || this.solucion_reclamo.length < 5) {
+        this.mensaje = 'Debe proporcionar una solución (mínimo 5 caracteres).';
+        setTimeout(() => this.mensaje = '', 8000);
+        return;
     }
 
+    this.atencionService.actualizarEstadoOrden(this.ordenSeleccionada.id_orden, {
+        estado: 'completada',
+        solucion_reclamo: this.solucion_reclamo
+    }).subscribe({
+        next: () => {
+        this.mensaje = `Orden #${this.ordenSeleccionada!.id_orden} completada exitosamente.`;
+        setTimeout(() => this.mensaje = '', 8000);
+        this.cerrarModal();
+        this.cargarOrdenes();
+        },
+        error: (err) => {
+        this.mensaje = `Error al completar la orden: ${err.error.error || 'Fallo de conexión'}`;
+        setTimeout(() => this.mensaje = '', 8000);
+        console.error(err);
+        }
+    });
+    }
     // Mostrar el nombre del estado en la tabla
     obtenerNombreEstado(estado: string): string {
         switch (estado) {

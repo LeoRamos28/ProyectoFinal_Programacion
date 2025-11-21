@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {jwtDecode} from 'jwt-decode';
+
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +36,33 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
   }
+
+   getUserPayload(): any {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      return jwt_decode(token); // puede usar tipo custom: jwt_decode<{ id: number, email: string, id_rol: number }>(token)
+    } catch {
+      return null;
+    }
+  }
+
+  // Devuelve solo el rol
+  getRolUsuario(): number | null {
+    const payload = this.getUserPayload();
+    return payload ? payload.id_rol : null;
+  }
 }
+
+function jwt_decode(token: string): any {
+  if (!token) return null;
+  try {
+    // JWT está formado por tres partes separadas por punto: header.payload.signature
+    const payload = token.split('.')[1];
+    // Decodifica base64 y transforma a objeto JS
+    return JSON.parse(atob(payload));
+  } catch {
+    return null;
+  }
+}
+

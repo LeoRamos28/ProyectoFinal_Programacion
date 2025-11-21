@@ -11,12 +11,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./dashboard.css'] 
 })
 export class DashboardComponent {
-  router: any;
-  authService: any;
+  rolUsuario: number = 0;
 
-logout() {
-  this.authService.logout();
-  this.router.navigate(['/login']); 
-}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
+  ngOnInit() {
+    this.rolUsuario = this.authService.getRolUsuario() ?? 0;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

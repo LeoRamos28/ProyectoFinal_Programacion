@@ -5,6 +5,7 @@ import { AtencionService } from '../../services/atencion';
 import { Cliente } from '../../models/cliente'; 
 import { OrdenTrabajo } from '../../models/orden-trabajo';
 import { Tecnico } from '../../models/tecnico'; 
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
     selector: 'app-atencion-cliente',
@@ -25,13 +26,14 @@ export class AtencionClienteComponent implements OnInit {
     mostrarFormularioCliente: boolean = false;
     mostrarFormularioOrden: boolean = false;
     errorMessage: string | null = null;
-    
+    mensaje: string = '';
+
     readonly MAX_ORDENES_PENDIENTES = 10; 
 
     // ID del usuario logueado 
     private readonly idUsuarioLogueado = 10; 
 
-    constructor(private atencionService: AtencionService) { }
+    constructor(private atencionService: AtencionService, private cdr: ChangeDetectorRef) { }
 
     ngOnInit(): void {
         this.cargarDatosIniciales();
@@ -99,11 +101,13 @@ export class AtencionClienteComponent implements OnInit {
                 const clienteCreado = res.cliente; 
                 const idGenerado = clienteCreado?.id_cliente || 'DESCONOCIDO'; 
                 
-                alert(`Cliente ${clienteCreado.nombre} #${idGenerado} registrado con éxito.`);
                 
+            this.mensaje = `Cliente  ${clienteCreado.nombre}registrado con éxito.`;
+            setTimeout(() => this.mensaje = '', 8000);  
                 this.clientes.push(clienteCreado);
                 this.mostrarFormularioCliente = false;
                 this.nuevoCliente = this.getNewClienteModel(); 
+                
             },
             error: (err) => {
                 this.errorMessage = 'Error al registrar cliente: ' + (err.error?.error || 'Fallo de conexión.');
@@ -120,45 +124,68 @@ export class AtencionClienteComponent implements OnInit {
         this.mostrarFormularioOrden = true;
     }
 
-    guardarOrden(): void {
-        this.errorMessage = null;
-        if (!this.nuevaOrden.id_cliente || !this.nuevaOrden.descripcion) {
-            this.errorMessage = 'Debe seleccionar un cliente y describir la orden.';
-            return;
-        }
+guardarOrden(): void { 
+  this.errorMessage = null;
+  if (!this.nuevaOrden.id_cliente || !this.nuevaOrden.descripcion) {
+      this.errorMessage = 'Debe seleccionar un cliente y describir la orden.';
+      return;
+  }
 
-        if (this.nuevaOrden.id_tecnico_asignado) {
-            this.nuevaOrden.estado = 'asignada';
-        } else {
-            this.nuevaOrden.estado = 'pendiente';
-        }
+  if (this.nuevaOrden.id_tecnico_asignado) {
+      this.nuevaOrden.estado = 'asignada';
+  } else {
+      this.nuevaOrden.estado = 'pendiente';
+  }
 
-        this.atencionService.createOrden(this.nuevaOrden).subscribe({
-            next: (res: any) => { 
-                const ordenCreada = res.orden; 
-                
-                const idGenerado = ordenCreada?.id_orden || 'DESCONOCIDO'; 
-                
-                alert(`Orden #${idGenerado} creada y ${ordenCreada.estado === 'asignada' ? 'asignada' : 'pendiente'}.`);
-                
-                this.misOrdenes.unshift(ordenCreada);
-                this.mostrarFormularioOrden = false;
-                
-                if (ordenCreada.id_tecnico_asignado) {
-                    this.atencionService.getTecnicosDisponibles().subscribe(data => this.tecnicos = data as Tecnico[]);
-                }
-            },
-            error: (err) => {
-                this.errorMessage = 'Error al crear la orden: ' + (err.error?.error || 'Fallo de conexión.');
-            }
-        });
-    }
+  this.atencionService.createOrden(this.nuevaOrden).subscribe({
+      next: (res: any) => { 
+          const ordenCreada = res.orden; 
+
+          // Asignar el nombre completo del técnico asignado para mostrar en tabla
+          if (ordenCreada.id_tecnico_asignado) {
+            const tecnico = this.tecnicos.find(t => t.id_usuario === ordenCreada.id_tecnico_asignado);
+            ordenCreada.tecnico_nombre = tecnico ? `${tecnico.nombre} ${tecnico.apellido}` : 'N/A';
+          } else {
+            ordenCreada.tecnico_nombre = 'N/A';
+          }
+        
+          const cliente = this.clientes.find(c => c.id_cliente === ordenCreada.id_cliente);
+          ordenCreada.cliente_nombre = cliente ? `${cliente.nombre} ${cliente.apellido}` : 'Cliente desconocido';
+          
+          const idGenerado = ordenCreada?.id_orden || 'DESCONOCIDO'; 
+
+          this.mensaje = `Orden #${idGenerado} creada y ${ordenCreada.estado}.`;
+          setTimeout(() => this.mensaje = '', 8000);
+
+          this.misOrdenes = [ordenCreada, ...this.misOrdenes];
+          this.cdr.detectChanges();
+
+          this.mostrarFormularioOrden = false;
+
+          if (ordenCreada.id_tecnico_asignado) {
+              this.atencionService.getTecnicosDisponibles().subscribe(data => this.tecnicos = data as Tecnico[]);
+          }
+      },
+      error: (err) => {
+          this.errorMessage = 'Error al crear la orden: ' + (err.error?.error || 'Fallo de conexión.');
+      }
+  });
+}
 
     // Función de utilidad para mostrar la carga en la interfaz
     getCargaTecnico(tecnico: Tecnico): string {
         const carga = (tecnico as any).ordenes_pendientes || 0;
         return `Carga: ${carga}/${this.MAX_ORDENES_PENDIENTES}`;
     }
+
+    onClienteSeleccionado(id_cliente: number) {
+        const cliente = this.clientes.find(c => c.id_cliente === id_cliente);
+        if (cliente) {
+            this.nuevaOrden.direccion_trabajo = cliente.direccion;
+        } else {
+            this.nuevaOrden.direccion_trabajo = '';
+        }
+        }
 
    
 

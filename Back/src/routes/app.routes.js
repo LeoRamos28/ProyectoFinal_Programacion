@@ -1,5 +1,5 @@
 import express from "express";
-import { verificarToken, soloMaster } from "../middlewares/auth.js";
+import { verificarToken, soloMaster, masterOrAtencion, masterOrTecnico } from "../middlewares/auth.js";
 
 // Importa TODOS los controladores de clientes
 import {
@@ -30,18 +30,18 @@ import {
 const router = express.Router();
 
 // ------- Rutas clientes -------
-router.get("/clientes", verificarToken, getClientes);
-router.get("/clientes/buscar", verificarToken, buscarClientes); // <-- NUEVA RUTA DE BÚSQUEDA
-router.post("/clientes", verificarToken, createCliente);
-router.put("/clientes/:id", verificarToken, updateCliente);
-router.delete("/clientes/:id", verificarToken, deleteCliente);
+router.get("/clientes", verificarToken, masterOrAtencion, getClientes);
+router.get("/clientes/buscar", verificarToken, masterOrAtencion, buscarClientes);
+router.post("/clientes", verificarToken, masterOrAtencion, createCliente);
+router.put("/clientes/:id", verificarToken, masterOrAtencion, updateCliente);
+router.delete("/clientes/:id", verificarToken, masterOrAtencion, deleteCliente);
 
 // ------- Rutas ordenes -------
-router.get("/ordenes/carga-trabajo", verificarToken, getTecnicosCarga);
-router.get("/ordenes/tecnico", verificarToken, getOrdenesTecnico);
-router.get("/ordenes", verificarToken, getOrdenes);
-router.post("/ordenes", verificarToken, createOrden);
-router.patch("/ordenes/:id", verificarToken, updateEstadoOrden);
+router.get("/ordenes", verificarToken, masterOrTecnico, getOrdenes);
+router.get("/ordenes/carga-trabajo", verificarToken, soloMaster, getTecnicosCarga); 
+router.get("/ordenes/tecnico", verificarToken, masterOrTecnico, getOrdenesTecnico);
+router.post("/ordenes", verificarToken, masterOrAtencion, createOrden);
+router.patch("/ordenes/:id", verificarToken, masterOrTecnico, updateEstadoOrden);
 
 // ------- Rutas usuarios -------
 router.get("/usuarios", verificarToken, getUsuarios);

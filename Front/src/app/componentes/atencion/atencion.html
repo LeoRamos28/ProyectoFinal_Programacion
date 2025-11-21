@@ -1,13 +1,24 @@
 <div class="container my-5">
   <div class="card p-4 shadow-lg border-0">
+    <div *ngIf="mensaje" class="alert alert-success text-center my-3">
+      {{ mensaje }}
+    </div>
+
     <!-- Encabezado y botones -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="h4 m-0 text-primary">Atención al Cliente y Órdenes</h2>
       <div class="d-flex">
-        <button (click)="mostrarFormularioCliente = true" class="btn btn-success btn-sm rounded-pill px-4 me-2 shadow-sm">
+        <button
+          (click)="mostrarFormularioCliente = true"
+          class="btn btn-success btn-sm rounded-pill px-4 me-2 shadow-sm"
+        >
           + Registrar Cliente
         </button>
-        <button (click)="abrirFormularioOrden()" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm" [disabled]="clientes.length === 0">
+        <button
+          (click)="abrirFormularioOrden()"
+          class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm"
+          [disabled]="clientes.length === 0"
+        >
           + Nueva Orden
         </button>
       </div>
@@ -37,24 +48,28 @@
             <td>{{ orden.id_orden }}</td>
             <td>{{ orden.cliente_nombre }}</td>
             <td>
-              <span 
+              <span
                 class="badge"
                 [class.bg-info]="orden.tipo === 'instalacion'"
-                [class.bg-warning]="orden.tipo === 'reclamo'">
+                [class.bg-warning]="orden.tipo === 'reclamo'"
+              >
                 {{ orden.tipo | titlecase }}
               </span>
             </td>
             <td>{{ orden.tecnico_nombre || 'N/A' }}</td>
             <td>
-              <span 
-                class="badge"
-                [class.bg-secondary]="orden.estado === 'pendiente'"
-                [class.bg-primary]="orden.estado === 'asignada'"
-                [class.bg-success]="orden.estado === 'finalizada'">
-                {{ orden.estado | titlecase }}
-              </span>
+            <span
+              class="badge"
+              [class.bg-secondary]="orden.estado === 'pendiente'"
+              [class.bg-primary]="orden.estado === 'asignada'"
+              [class.bg-success]="orden.estado === 'finalizada'"
+              [class.bg-warning]="orden.estado === 'en_proceso'"
+              [class.bg-danger]="orden.estado === 'cancelada'"
+            >
+              {{ orden.estado | titlecase }}
+            </span>
             </td>
-            <td>{{ orden.fecha_creacion | date:'shortDate' }}</td>
+            <td>{{ orden.fecha_creacion | date : 'shortDate' }}</td>
           </tr>
         </tbody>
       </table>
@@ -74,31 +89,73 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label">Nombre:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.nombre" name="cnombre" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.nombre"
+              name="cnombre"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Apellido:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.apellido" name="capellido" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.apellido"
+              name="capellido"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">DNI:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.dni" name="cdni" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.dni"
+              name="cdni"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Provincia:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.provincia" name="cprovincia" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.provincia"
+              name="cprovincia"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Localidad:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.localidad" name="clocalidad" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.localidad"
+              name="clocalidad"
+              required
+            />
           </div>
           <div class="col-12">
             <label class="form-label">Dirección (Calle y Número):</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevoCliente.direccion" name="cdireccion" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevoCliente.direccion"
+              name="cdireccion"
+              required
+            />
           </div>
         </div>
         <div class="mt-4 text-end">
-          <button type="button" (click)="mostrarFormularioCliente = false" class="btn btn-secondary me-2">Cancelar</button>
+          <button
+            type="button"
+            (click)="mostrarFormularioCliente = false"
+            class="btn btn-secondary me-2"
+          >
+            Cancelar
+          </button>
           <button type="submit" class="btn btn-success">Guardar Cliente</button>
         </div>
       </form>
@@ -116,10 +173,16 @@
           <!-- Cliente -->
           <div class="col-12">
             <label class="form-label">Cliente Asociado:</label>
-            <select class="form-select" [(ngModel)]="nuevaOrden.id_cliente" name="oidCliente" required>
+            <select
+              class="form-select"
+              [(ngModel)]="nuevaOrden.id_cliente"
+              name="oidCliente"
+              required
+              (ngModelChange)="onClienteSeleccionado($event)"
+            >
               <option [value]="0" disabled>Seleccione un cliente...</option>
               <option *ngFor="let c of clientes" [ngValue]="c.id_cliente">
-                {{ c.nombre }} {{ c.apellido }} ({{ c.direccion }})
+                {{ c.nombre }} {{ c.apellido }} 
               </option>
             </select>
           </div>
@@ -136,24 +199,45 @@
           <!-- Dirección -->
           <div class="col-md-6">
             <label class="form-label">Dirección de Trabajo:</label>
-            <input type="text" class="form-control" [(ngModel)]="nuevaOrden.direccion_trabajo" name="oDireccion" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nuevaOrden.direccion_trabajo"
+              name="oDireccion"
+              required
+            />
           </div>
 
           <!-- Descripción -->
           <div class="col-12">
             <label class="form-label">Descripción Detallada:</label>
-            <textarea class="form-control" [(ngModel)]="nuevaOrden.descripcion" name="oDescripcion" rows="3" required></textarea>
+            <textarea
+              class="form-control"
+              [(ngModel)]="nuevaOrden.descripcion"
+              name="oDescripcion"
+              rows="3"
+              required
+            ></textarea>
           </div>
 
           <!-- Asignación a Técnico -->
           <div class="col-12">
             <label class="form-label">Asignar Técnico (Opcional):</label>
-            <select class="form-select" [(ngModel)]="nuevaOrden.id_tecnico_asignado" name="oTecnico">
+            <select
+              class="form-select"
+              [(ngModel)]="nuevaOrden.id_tecnico_asignado"
+              name="oTecnico"
+            >
               <option [ngValue]="null">Dejar Pendiente (Se asignará después)</option>
-              <option *ngFor="let t of tecnicos" [ngValue]="t.id_usuario" 
-                      [disabled]="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES">
+              <option
+                *ngFor="let t of tecnicos"
+                [ngValue]="t.id_usuario"
+                [disabled]="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES"
+              >
                 {{ t.nombre }} {{ t.apellido }} - {{ getCargaTecnico(t) }}
-                <span *ngIf="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES"> (SOBRECARGADO)</span>
+                <span *ngIf="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES">
+                  (SOBRECARGADO)</span
+                >
               </option>
             </select>
           </div>
@@ -161,11 +245,22 @@
 
         <div class="col-md-6">
           <label class="form-label">Fecha de Asignación (Opcional):</label>
-          <input type="date" class="form-control" [(ngModel)]="nuevaOrden.fecha_asignacion" name="oFechaAsignacion">
-      </div>
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="nuevaOrden.fecha_asignacion"
+            name="oFechaAsignacion"
+          />
+        </div>
 
         <div class="mt-4 text-end">
-          <button type="button" (click)="mostrarFormularioOrden = false" class="btn btn-secondary me-2">Cancelar</button>
+          <button
+            type="button"
+            (click)="mostrarFormularioOrden = false"
+            class="btn btn-secondary me-2"
+          >
+            Cancelar
+          </button>
           <button type="submit" class="btn btn-primary">Crear Orden</button>
         </div>
       </form>
