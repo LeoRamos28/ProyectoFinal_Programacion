@@ -9,6 +9,7 @@ export const getClientes = async (req, res) => {
                 'id_cliente', 
                 'nombre', 
                 'apellido', 
+                'dni',
                 'provincia', 
                 'localidad', 
                 'direccion'
@@ -28,13 +29,14 @@ export const createCliente = async (req, res) => {
     try {
         const { 
             nombre, 
-            apellido, 
+            apellido,
+            dni, 
             provincia, 
             localidad, 
             direccion 
         } = req.body;
 
-        if (!nombre || !apellido || !provincia || !localidad || !direccion) {
+        if (!nombre || !apellido || !provincia || !dni || !localidad || !direccion) {
             return res.status(400).json({ error: "Faltan campos obligatorios del cliente." });
         }
         
@@ -42,6 +44,7 @@ export const createCliente = async (req, res) => {
             nombre,
             apellido,
             provincia,
+            dni,
             localidad,
             direccion
         });
@@ -69,6 +72,7 @@ export const buscarClientes = async (req, res) => {
                 [Op.or]: [
                     { nombre: { [Op.like]: `%${query}%` } },
                     { apellido: { [Op.like]: `%${query}%` } },
+                    { dni: { [Op.like]: `%${query}%` } },
                     { provincia: { [Op.like]: `%${query}%` } },
                     { localidad: { [Op.like]: `%${query}%` } },
                     { direccion: { [Op.like]: `%${query}%` } }
@@ -78,6 +82,7 @@ export const buscarClientes = async (req, res) => {
                 'id_cliente', 
                 'nombre', 
                 'apellido', 
+                'dni',
                 'provincia', 
                 'localidad', 
                 'direccion'
@@ -110,7 +115,7 @@ export const deleteCliente = async (req, res) => {
 // Editar cliente
 export const updateCliente = async (req, res) => {
   const { id } = req.params;
-  const { nombre, apellido, provincia, localidad, direccion } = req.body;
+  const { nombre, apellido, dni, provincia, localidad, direccion } = req.body;
   try {
     const cliente = await Cliente.findByPk(id);
     if (!cliente) {
@@ -121,6 +126,8 @@ export const updateCliente = async (req, res) => {
     cliente.provincia = provincia ?? cliente.provincia;
     cliente.localidad = localidad ?? cliente.localidad;
     cliente.direccion = direccion ?? cliente.direccion;
+    cliente.dni = dni ?? cliente.dni;
+
     await cliente.save();
     res.json({ mensaje: "Cliente actualizado.", cliente });
   } catch (error) {
