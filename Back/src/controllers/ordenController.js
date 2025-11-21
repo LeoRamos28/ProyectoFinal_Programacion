@@ -153,6 +153,19 @@ export const createOrden = async (req, res) => {
              return res.status(400).json({ error: "Faltan datos de la orden o el usuario logueado." });
         }
         
+                // Si se asigna un técnico, verifica su carga antes de crear la orden
+        if (id_tecnico_asignado) {
+            const ordenesAsignadas = await OrdenTrabajo.count({
+                where: {
+                    id_tecnico_asignado: id_tecnico_asignado,
+                    estado: { [Op.in]: ['pendiente', 'asignada'] } // ajusta los estados si usas diferentes
+                }
+            });
+            if (ordenesAsignadas >= 10) {
+                return res.status(400).json({ error: "El técnico ya tiene la carga máxima de órdenes pendientes/asignadas." });
+            }
+        }
+
         // Determinar el estado inicial: 'pendiente' si no se asigna técnico, 'asignada' si se asigna.
         const estadoInicial = id_tecnico_asignado ? 'asignada' : 'pendiente';
 

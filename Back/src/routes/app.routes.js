@@ -1,5 +1,5 @@
 import express from "express";
-import { verificarToken, soloMaster, masterOrAtencion, masterOrTecnico } from "../middlewares/auth.js";
+import { verificarToken, soloMaster, masterOrAtencion, masterOrTecnico, masterTecnicoAtencion } from "../middlewares/auth.js";
 
 // Importa TODOS los controladores de clientes
 import {
@@ -37,8 +37,8 @@ router.put("/clientes/:id", verificarToken, masterOrAtencion, updateCliente);
 router.delete("/clientes/:id", verificarToken, masterOrAtencion, deleteCliente);
 
 // ------- Rutas ordenes -------
-router.get("/ordenes", verificarToken, masterOrTecnico, getOrdenes);
-router.get("/ordenes/carga-trabajo", verificarToken, soloMaster, getTecnicosCarga); 
+router.get("/ordenes", verificarToken, masterTecnicoAtencion, getOrdenes);
+router.get("/ordenes/carga-trabajo", verificarToken, masterOrAtencion, getTecnicosCarga); 
 router.get("/ordenes/tecnico", verificarToken, masterOrTecnico, getOrdenesTecnico);
 router.post("/ordenes", verificarToken, masterOrAtencion, createOrden);
 router.patch("/ordenes/:id", verificarToken, masterOrTecnico, updateEstadoOrden);

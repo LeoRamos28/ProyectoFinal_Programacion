@@ -41,7 +41,7 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return null;
     try {
-      return jwt_decode(token); // puede usar tipo custom: jwt_decode<{ id: number, email: string, id_rol: number }>(token)
+      return jwt_decode(token); 
     } catch {
       return null;
     }
@@ -57,7 +57,6 @@ export class AuthService {
 function jwt_decode(token: string): any {
   if (!token) return null;
   try {
-    // JWT está formado por tres partes separadas por punto: header.payload.signature
     const payload = token.split('.')[1];
     // Decodifica base64 y transforma a objeto JS
     return JSON.parse(atob(payload));

@@ -81,3 +81,9 @@ export function masterOrTecnico(req, res, next) {
   return res.status(403).json({ error: "Acceso solo para Master o Técnico." });
 }
 
+export function masterTecnicoAtencion(req, res, next) {
+  if (req.usuario && [1, 2, 3].includes(req.usuario.id_rol)) {
+    return next();
+  }
+  return res.status(403).json({ error: "Acceso solo para Master, Técnico o Atención." });
+}
