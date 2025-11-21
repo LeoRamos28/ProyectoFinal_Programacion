@@ -1,70 +1,61 @@
 <div class="login-wrapper">
-<div class="login-container" data-aos="fade-up">
-  <div class="text-center">
-    <h1 class="title">Infinet Fibra</h1>
-    <h2 class="subtitle">Iniciar Sesión</h2>
-    <p class="text-muted">Accede a tu cuenta para gestionar tu red</p>
-  </div>
+  <div class="login-card" data-aos="fade-up">
+    
+    <!-- Cabecera -->
+    <div class="text-center">
+      <h1 class="brand-title">Infinet Fibra</h1>
+      <h2 class="subtitle">Iniciar Sesión</h2>
+      <p class="description">Accede a tu cuenta para gestionar tu red</p>
+    </div>
 
-  <div class="form-card">
+    <!-- Formulario -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
       <!-- Email -->
-      <div>
+      <div class="form-group">
         <label for="email" class="form-label">Email</label>
         <input
           id="email"
           type="email"
           formControlName="email"
           placeholder="ejemplo@correo.com"
-          class="form-input"
+          class="form-control"
+          [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         />
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+        <!-- Mensaje de error -->
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-msg">
           El email es obligatorio y debe ser válido.
         </div>
       </div>
 
       <!-- Password -->
-      <div>
+      <div class="form-group">
         <label for="password" class="form-label">Contraseña</label>
         <input
           id="password"
           type="password"
           formControlName="password"
           placeholder="••••••••"
-          class="form-input"
+          class="form-control"
+          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
         />
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+        <!-- Mensaje de error -->
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-msg">
           La contraseña es obligatoria.
         </div>
       </div>
 
-      <!-- Recordarme + Olvidé contraseña -->
-      <div class="flex-between">
-        <div class="checkbox-container">
-          <input id="remember-me" type="checkbox" />
-          <label for="remember-me">Recordarme</label>
-        </div>
-        <a href="#" class="link">¿Olvidaste tu contraseña?</a>
-      </div>
-
-      <!-- Botón -->
-      <button type="submit" [disabled]="loginForm.invalid">
-        Iniciar Sesión
+      <!-- Botón (Sin recordarme ni olvido de contraseña) -->
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">
+        Ingresar
       </button>
 
-      <!-- Registro -->
-      <div class="text-center">
-        <p class="text-sm text-gray-600">
-          ¿No tienes cuenta?
-          <a href="/register" class="link">Regístrate aquí</a>
-        </p>
-      </div>
     </form>
-  </div>
 
-  <!-- Volver -->
-  <div class="text-center mt-4">
-    <a routerLink="/" class="link">← Volver al inicio</a>
+    <!-- Volver a landing -->
+    <div class="footer-link">
+      <a routerLink="/" class="back-link">← Volver al inicio</a>
+    </div>
+
   </div>
-</div>
 </div>
