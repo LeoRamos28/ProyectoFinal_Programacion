@@ -2,7 +2,7 @@
 <div class="mb-3">
   <input
     class="form-control"
-    placeholder="Buscar cliente (por nombre, apellido, localidad...)"
+    placeholder="Buscar cliente (por nombre, apellido, DNI, localidad...)"
     [(ngModel)]="termino"
   >
   <button class="btn btn-primary mt-2" (click)="buscar()">Buscar</button>
@@ -17,6 +17,7 @@
     <tr>
       <th>Nombre</th>
       <th>Apellido</th>
+      <th>DNI</th>
       <th>Provincia</th>
       <th>Localidad</th>
       <th>Dirección</th>
@@ -34,6 +35,10 @@
         <td>
           <label for="apellido{{c.id_cliente}}" class="visually-hidden">Apellido</label>
           <input id="apellido{{c.id_cliente}}" [(ngModel)]="clienteEdit.apellido" class="form-control" />
+        </td>
+         <td>
+          <label for="dni{{c.id_cliente}}" class="visually-hidden">DNI</label>
+          <input id="dni{{c.id_cliente}}" [(ngModel)]="clienteEdit.dni" class="form-control" />
         </td>
         <td>
           <label for="provincia{{c.id_cliente}}" class="visually-hidden">Provincia</label>
@@ -56,6 +61,7 @@
         <!-- Fila normal -->
         <td>{{ c.nombre }}</td>
         <td>{{ c.apellido }}</td>
+        <td>{{ c.dni }}</td>
         <td>{{ c.provincia }}</td>
         <td>{{ c.localidad }}</td>
         <td>{{ c.direccion }}</td>
