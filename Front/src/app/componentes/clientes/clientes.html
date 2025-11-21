@@ -9,7 +9,9 @@
 </div>
 
 <!-- Mensaje informativo -->
-<div *ngIf="mensaje" class="alert alert-info text-center">{{ mensaje }}</div>
+<div *ngIf="mensaje" class="alert alert-success text-center my-3">
+  {{ mensaje }}
+</div>
 
 <!-- Tabla de clientes si hay resultados -->
 <table class="table table-striped mt-3" *ngIf="clientes.length > 0">

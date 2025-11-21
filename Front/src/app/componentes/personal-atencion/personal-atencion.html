@@ -1,0 +1,115 @@
+<div *ngIf="mensaje" class="alert alert-success mb-4">
+  {{ mensaje }}
+</div>
+
+<div class="container my-5">
+  <div class="card p-4 shadow-lg border-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h4 m-0 text-primary">Gestión de Personal de Atención ☎️</h2>
+      <button (click)="agregarAtencion()" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">
+        + Nuevo Atención
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger mb-4">
+      {{ errorMessage }}
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="bg-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let atencion of personalAtencion">
+            <td>{{ atencion.id_usuario }}</td>
+            <td>{{ atencion.nombre }}</td>
+            <td>{{ atencion.apellido }}</td>
+            <td>{{ atencion.email }}</td>
+            <td>
+              <span class="badge"
+                    [class.bg-success]="atencion.estado"
+                    [class.bg-danger]="!atencion.estado">
+                {{ atencion.estado ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button (click)="editarAtencion(atencion)" class="btn btn-sm btn-warning me-2">Editar</button>
+              <button (click)="eliminarAtencion(atencion.id_usuario)" class="btn btn-sm btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="personalAtencion.length === 0" class="alert alert-info text-center mt-3 border-0 shadow-sm">
+        No hay personal de atención registrado. Presiona "+ Nuevo Atención" para empezar.
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFormulario && atencionSeleccionado" class="modal-overlay">
+    <div class="card p-5 shadow-2xl modal-content-centered">
+      <h3 class="mb-4 text-center">
+        {{ atencionSeleccionado.id_usuario === 0 ? 'Crear' : 'Editar' }} Atención
+      </h3>
+
+      <form (ngSubmit)="guardarAtencion()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Nombre:</label>
+            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.nombre" name="nombre" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Apellido:</label>
+            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.apellido" name="apellido" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email:</label>
+            <input type="email" class="form-control" [(ngModel)]="atencionSeleccionado.email" name="email" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">DNI:</label>
+            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.dni" name="dni" required>
+          </div>
+          <div class="col-12" *ngIf="atencionSeleccionado.id_usuario === 0">
+            <label class="form-label">Contraseña:</label>
+            <input type="password"
+                   class="form-control"
+                   [(ngModel)]="atencionSeleccionado.password"
+                   name="password"
+                   required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Teléfono:</label>
+            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.telefono" name="telefono">
+          </div>
+          <div class="col-md-6 d-flex align-items-center pt-4">
+            <label class="form-label me-3 mb-0">Estado:</label>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="estadoSwitch"
+                [(ngModel)]="atencionSeleccionado.estado"
+                name="estado">
+              <label class="form-check-label" for="estadoSwitch">
+                {{ atencionSeleccionado.estado ? 'Activo' : 'Inactivo' }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-end">
+          <button type="button" (click)="mostrarFormulario = false" class="btn btn-secondary me-2">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
