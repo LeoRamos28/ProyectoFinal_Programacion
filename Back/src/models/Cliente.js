@@ -15,6 +15,11 @@ const Cliente = sequelize.define('Cliente', {
         type: DataTypes.STRING(100),
         allowNull: false,
     },
+    dni: {
+          type: DataTypes.STRING(20),
+          allowNull: false,
+          unique: true
+        },
     provincia: {
         type: DataTypes.STRING(100),
         allowNull: false,

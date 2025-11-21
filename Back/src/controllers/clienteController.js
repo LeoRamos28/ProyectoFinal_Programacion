@@ -9,6 +9,7 @@ export const getClientes = async (req, res) => {
                 'id_cliente', 
                 'nombre', 
                 'apellido', 
+                'dni',
                 'provincia', 
                 'localidad', 
                 'direccion'
@@ -28,13 +29,14 @@ export const createCliente = async (req, res) => {
     try {
         const { 
             nombre, 
-            apellido, 
+            apellido,
+            dni, 
             provincia, 
             localidad, 
             direccion 
         } = req.body;
 
-        if (!nombre || !apellido || !provincia || !localidad || !direccion) {
+        if (!nombre || !apellido || !provincia || !dni || !localidad || !direccion) {
             return res.status(400).json({ error: "Faltan campos obligatorios del cliente." });
         }
         
@@ -43,6 +45,7 @@ export const createCliente = async (req, res) => {
             nombre,
             apellido,
             provincia,
+            dni,
             localidad,
             direccion
         });
