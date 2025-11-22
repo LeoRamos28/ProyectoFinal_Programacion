@@ -16,6 +16,10 @@
     max-width: 90%;
     width: 600px;
 } */
+option[disabled] {
+  color: #d9534f; /* rojo Bootstrap */
+  font-weight: bold;
+}
 
 
 

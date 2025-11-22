@@ -234,13 +234,14 @@
                 [ngValue]="t.id_usuario"
                 [disabled]="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES"
               >
-                {{ t.nombre }} {{ t.apellido }} - {{ getCargaTecnico(t) }}
+                {{ t.nombre }} {{ t.apellido }} - Carga: {{ t.ordenes_pendientes ?? 0 }}/{{ MAX_ORDENES_PENDIENTES }}
                 <span *ngIf="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES">
-                  (SOBRECARGADO)</span
-                >
+                  (SOBRECARGADO)
+                </span>
               </option>
             </select>
           </div>
+
         </div>
 
         <div class="col-md-6">

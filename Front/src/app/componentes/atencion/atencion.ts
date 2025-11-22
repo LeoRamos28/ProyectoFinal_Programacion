@@ -126,52 +126,58 @@ export class AtencionClienteComponent implements OnInit {
 
 guardarOrden(): void { 
   this.errorMessage = null;
+
+  // Validaciones de datos obligatorios
   if (!this.nuevaOrden.id_cliente || !this.nuevaOrden.descripcion) {
-      this.errorMessage = 'Debe seleccionar un cliente y describir la orden.';
-      return;
+    this.errorMessage = 'Debe seleccionar un cliente y describir la orden.';
+    return;
   }
 
+  // Validación de carga máxima del técnico (solo si se asigna)
   if (this.nuevaOrden.id_tecnico_asignado) {
-      this.nuevaOrden.estado = 'asignada';
+    const tecnico = this.tecnicos.find(t => t.id_usuario === this.nuevaOrden.id_tecnico_asignado);
+    if (tecnico && (tecnico.ordenes_pendientes ?? 0) >= this.MAX_ORDENES_PENDIENTES) {
+      this.errorMessage = 'Este técnico ya tiene la carga máxima permitida.';
+      return;
+    }
+    this.nuevaOrden.estado = 'asignada';
   } else {
-      this.nuevaOrden.estado = 'pendiente';
+    this.nuevaOrden.estado = 'pendiente';
   }
 
+  // Si pasó todas las validaciones, enviamos la orden al backend
   this.atencionService.createOrden(this.nuevaOrden).subscribe({
-      next: (res: any) => { 
-          const ordenCreada = res.orden; 
+    next: (res: any) => { 
+      const ordenCreada = res.orden;
 
-          // Asignar el nombre completo del técnico asignado para mostrar en tabla
-          if (ordenCreada.id_tecnico_asignado) {
-            const tecnico = this.tecnicos.find(t => t.id_usuario === ordenCreada.id_tecnico_asignado);
-            ordenCreada.tecnico_nombre = tecnico ? `${tecnico.nombre} ${tecnico.apellido}` : 'N/A';
-          } else {
-            ordenCreada.tecnico_nombre = 'N/A';
-          }
-        
-          const cliente = this.clientes.find(c => c.id_cliente === ordenCreada.id_cliente);
-          ordenCreada.cliente_nombre = cliente ? `${cliente.nombre} ${cliente.apellido}` : 'Cliente desconocido';
-          
-          const idGenerado = ordenCreada?.id_orden || 'DESCONOCIDO'; 
-
-          this.mensaje = `Orden #${idGenerado} creada y ${ordenCreada.estado}.`;
-          setTimeout(() => this.mensaje = '', 8000);
-
-          this.misOrdenes = [ordenCreada, ...this.misOrdenes];
-          this.cdr.detectChanges();
-
-          this.mostrarFormularioOrden = false;
-
-          if (ordenCreada.id_tecnico_asignado) {
-              this.atencionService.getTecnicosDisponibles().subscribe(data => this.tecnicos = data as Tecnico[]);
-          }
-      },
-      error: (err) => {
-          this.errorMessage = 'Error al crear la orden: ' + (err.error?.error || 'Fallo de conexión.');
+      // Asignación visual extra de nombres
+      if (ordenCreada.id_tecnico_asignado) {
+        const tecnico = this.tecnicos.find(t => t.id_usuario === ordenCreada.id_tecnico_asignado);
+        ordenCreada.tecnico_nombre = tecnico ? `${tecnico.nombre} ${tecnico.apellido}` : 'N/A';
+      } else {
+        ordenCreada.tecnico_nombre = 'N/A';
       }
+
+      const cliente = this.clientes.find(c => c.id_cliente === ordenCreada.id_cliente);
+      ordenCreada.cliente_nombre = cliente ? `${cliente.nombre} ${cliente.apellido}` : 'Cliente desconocido';
+      const idGenerado = ordenCreada?.id_orden || 'DESCONOCIDO';
+
+      this.mensaje = `Orden #${idGenerado} creada y ${ordenCreada.estado}.`;
+      setTimeout(() => this.mensaje = '', 8000);
+
+      this.misOrdenes = [ordenCreada, ...this.misOrdenes];
+      this.cdr.detectChanges();
+      this.mostrarFormularioOrden = false;
+
+      if (ordenCreada.id_tecnico_asignado) {
+        this.atencionService.getTecnicosDisponibles().subscribe(data => this.tecnicos = data as Tecnico[]);
+      }
+    },
+    error: (err) => {
+      this.errorMessage = 'Error al crear la orden: ' + (err.error?.error || 'Fallo de conexión.');
+    }
   });
 }
-
     // Función de utilidad para mostrar la carga en la interfaz
     getCargaTecnico(tecnico: Tecnico): string {
         const carga = (tecnico as any).ordenes_pendientes || 0;

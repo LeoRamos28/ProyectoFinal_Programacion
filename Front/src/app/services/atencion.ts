@@ -47,35 +47,18 @@ export class AtencionService {
     }
 
     getTecnicosDisponibles(): Observable<Tecnico[]> {
-        const headers = this.getAuthHeaders();
-        
-        const tecnicos$ = this.http.get<Tecnico[]>(
-            `${this.baseUrl}/usuarios?id_rol=${this.ID_ROL_TECNICO}`, { headers }
-        );
-
-        const cargaTrabajo$ = this.http.get<any[]>(
-            `${this.baseUrl}/ordenes/carga-trabajo`, { headers }
-        );
-
-        return forkJoin([tecnicos$, cargaTrabajo$]).pipe(
-            map(([tecnicos, cargaTrabajo]) => {
-                return tecnicos.map(t => {
-                    const carga = cargaTrabajo.find(c => c.id_tecnico === t.id_usuario);
-                    (t as any).ordenes_pendientes = carga ? carga.count : 0;
-                    return t;
-                }).sort((a, b) => (a as any).ordenes_pendientes - (b as any).ordenes_pendientes);
-            })
-        );
+    const headers = this.getAuthHeaders();
+    return this.http.get<Tecnico[]>(`${this.baseUrl}/ordenes/carga-trabajo`, { headers });
     }
 
-    getOrdenesAsignadasATecnico(): Observable<OrdenTrabajo[]> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<OrdenTrabajo[]>(`${this.baseUrl}/ordenes/tecnico`, { headers });
-}
+        getOrdenesAsignadasATecnico(): Observable<OrdenTrabajo[]> {
+        const headers = this.getAuthHeaders();
+        return this.http.get<OrdenTrabajo[]>(`${this.baseUrl}/ordenes/tecnico`, { headers });
+    }
 
-actualizarEstadoOrden(idOrden: number, datos: { estado: string, solucion_reclamo?: string }): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch(`${this.baseUrl}/ordenes/${idOrden}`, datos, { headers });
-}
+    actualizarEstadoOrden(idOrden: number, datos: { estado: string, solucion_reclamo?: string }): Observable<any> {
+        const headers = this.getAuthHeaders();
+        return this.http.patch(`${this.baseUrl}/ordenes/${idOrden}`, datos, { headers });
+    }
 
-}
+    }
