@@ -7,6 +7,7 @@ import { AtencionClienteComponent } from './componentes/atencion/atencion';
 import { OrdenesTecnicoComponent } from './componentes/ordenes-tecnico/ordenes-tecnico';
 import { Clientes } from './componentes/clientes/clientes';
 import { PersonalAtencionComponent } from './componentes/personal-atencion/personal-atencion';
+import { InventarioComponent } from './componentes/inventario/inventario.component';
 
 
 export const routes: Routes = [
@@ -23,6 +24,7 @@ export const routes: Routes = [
       { path: 'atencion', component: AtencionClienteComponent },
       { path: 'ordenes-tecnico', component: OrdenesTecnicoComponent },
       { path: 'clientes', component: Clientes },
+      { path: 'inventario', component: InventarioComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

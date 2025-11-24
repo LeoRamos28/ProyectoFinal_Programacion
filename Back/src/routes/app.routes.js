@@ -27,6 +27,13 @@ import {
   registrar,
 } from "../controllers/usuarioController.js";
 
+import {
+  getInventario,
+  crearItem,
+  actualizarItem,
+  eliminarItem
+} from "../controllers/inventarioController.js";
+
 const router = express.Router();
 
 // ------- Rutas clientes -------
@@ -51,5 +58,12 @@ router.delete("/usuarios/:id", verificarToken, soloMaster, deleteUsuario);
 
 router.post("/usuarios/login", login);
 router.post("/usuarios/register", registrar);
+
+// ------- Rutas inventario -------
+
+router.get("/inventario", verificarToken, masterTecnicoAtencion, getInventario);
+router.post("/inventario", verificarToken, masterOrAtencion, crearItem);
+router.put("/inventario/:id", verificarToken, masterOrAtencion, actualizarItem);
+router.delete("/inventario/:id", verificarToken, soloMaster, eliminarItem); // Quizás borrar solo lo deba hacer el Master
 
 export default router;
