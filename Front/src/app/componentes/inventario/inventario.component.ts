@@ -16,8 +16,8 @@ export class InventarioComponent implements OnInit {
   cargando: boolean = false;
   
   // --- LÓGICA DEL MODAL ---
-  mostrarModal: boolean = false; // El interruptor mágico
-  mensaje: string = ''; // Para mostrar feedback (opcional)
+  mostrarModal: boolean = false;
+  mensaje: string = ''; 
 
   productoActual: any = {
     id_producto: null,

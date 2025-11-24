@@ -4,7 +4,7 @@ import { QueryTypes } from "sequelize"; // Importamos esto por seguridad para la
 // 1. LISTAR (GET)
 export const getInventario = async (req, res) => {
   try {
-    // En Sequelize usamos { type: QueryTypes.SELECT } para que devuelva solo los datos limpios
+    // Devolvemos los datos limpios
     const results = await db.query('SELECT * FROM inventario WHERE activo = 1', {
       type: QueryTypes.SELECT
     });
@@ -20,7 +20,7 @@ export const crearItem = async (req, res) => {
   const { nombre, descripcion, stock_actual, unidad_medida } = req.body;
   
   try {
-    // Sequelize usa "replacements" para reemplazar los signos de interrogación (?)
+    
     const [result] = await db.query(
       'INSERT INTO inventario (nombre, descripcion, stock_actual, unidad_medida) VALUES (?, ?, ?, ?)',
       {
@@ -29,7 +29,7 @@ export const crearItem = async (req, res) => {
       }
     );
 
-    // En MySQL con Sequelize, el primer elemento del array suele ser el ID insertado
+    
     res.json({ 
       message: 'Item creado correctamente', 
       id_producto: result 

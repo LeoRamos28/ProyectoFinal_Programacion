@@ -7,16 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class InventarioService {
   
-  // Ajusta el puerto si es necesario
+  // Ajusta el puerto en caso de ser necesario
   private apiUrl = 'http://localhost:3000/api/inventario';
 
   constructor(private http: HttpClient) { }
 
-  // Función para obtener el token guardado
+  // Obtener el token guardado
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // Asegúrate que guardas el token con este nombre
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}` // El espacio después de Bearer es clave
+      'Authorization': `Bearer ${token}`
     });
   }
 

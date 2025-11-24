@@ -64,6 +64,6 @@ router.post("/usuarios/register", registrar);
 router.get("/inventario", verificarToken, masterTecnicoAtencion, getInventario);
 router.post("/inventario", verificarToken, masterOrAtencion, crearItem);
 router.put("/inventario/:id", verificarToken, masterOrAtencion, actualizarItem);
-router.delete("/inventario/:id", verificarToken, soloMaster, eliminarItem); // Quizás borrar solo lo deba hacer el Master
+router.delete("/inventario/:id", verificarToken, soloMaster, eliminarItem); // Eliminar comentario cuando se haga la corrección de la protección a esta ruta
 
 export default router;
