@@ -81,7 +81,10 @@ export class InventarioComponent implements OnInit {
         .subscribe(() => {
           this.cargarInventario();
           this.cerrarModal();
-          // alert('Actualizado correctamente');
+          this.mensaje = 'Actualizado exitosamente.'; // NUEVO
+          setTimeout(() => this.mensaje = '', 5000);
+          return;
+
         });
     } else {
       // CREAR
@@ -89,7 +92,10 @@ export class InventarioComponent implements OnInit {
         .subscribe(() => {
           this.cargarInventario();
           this.cerrarModal();
-          // alert('Creado correctamente');
+          this.mensaje = 'Creado exitosamente.'; // NUEVO
+          setTimeout(() => this.mensaje = '', 5000);
+          return;
+
         });
     }
   }
@@ -98,6 +104,11 @@ export class InventarioComponent implements OnInit {
     if (confirm('¿Estás seguro de eliminar este ítem?')) {
       this.inventarioService.eliminarProducto(id).subscribe(() => {
         this.cargarInventario();
+        this.mensaje = 'Eliminado exitosamente.'; // NUEVO
+        setTimeout(() => this.mensaje = '', 5000);
+        return;
+
+
       });
     }
   }

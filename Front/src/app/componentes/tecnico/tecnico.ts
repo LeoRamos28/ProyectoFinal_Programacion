@@ -92,6 +92,8 @@ export class TecnicoComponent implements OnInit {
                     this.mostrarFormulario = false;
                     this.cargarTecnicos(); 
                     this.mensaje = 'Tecnico creado exitosamente.'; // NUEVO
+                    setTimeout(() => this.mensaje = '', 5000);
+                    return;
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al crear el técnico: ' + (err.error?.error || 'Verifique los datos (DNI/Email duplicado).');
@@ -110,6 +112,8 @@ export class TecnicoComponent implements OnInit {
                     this.mostrarFormulario = false;
                     this.cargarTecnicos(); 
                     this.mensaje = 'Tecnico actualizado exitosamente.'; // NUEVO
+                    setTimeout(() => this.mensaje = '', 5000);
+                    return;
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al actualizar el técnico: ' + (err.error?.error || 'Verifique los datos.');
@@ -126,6 +130,8 @@ export class TecnicoComponent implements OnInit {
                 next: () => {
                     this.cargarTecnicos(); 
                     this.mensaje = 'Personal de atención eliminado exitosamente.'; // NUEVO
+                    setTimeout(() => this.mensaje = '', 5000);
+                    return;
                 },
                 error: (err) => {
                     this.errorMessage = 'Error al eliminar el técnico: ' + (err.error?.message || err.message);

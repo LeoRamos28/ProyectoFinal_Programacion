@@ -87,7 +87,8 @@ export class PersonalAtencionComponent implements OnInit {
           this.mostrarFormulario = false;
           this.cargarPersonal();
         this.mensaje = 'Personal de atención creado exitosamente.'; // NUEVO
-
+        setTimeout(() => this.mensaje = '', 5000);
+        return;
         },
         error: (err) => {
           this.errorMessage = 'Error al crear: ' + (err.error?.error || 'Verifique los datos (DNI/Email duplicado).');
@@ -104,7 +105,10 @@ export class PersonalAtencionComponent implements OnInit {
         next: () => {
           this.mostrarFormulario = false;
           this.cargarPersonal();
-this.mensaje = 'Personal de atención actualizado exitosamente.'; // NUEVO
+          this.mensaje = 'Personal de atención actualizado exitosamente.'; // NUEVO
+          setTimeout(() => this.mensaje = '', 5000);
+          return;
+
         },
         error: (err) => {
           this.errorMessage = 'Error al actualizar: ' + (err.error?.error || 'Verifique los datos.');
@@ -120,6 +124,9 @@ this.mensaje = 'Personal de atención actualizado exitosamente.'; // NUEVO
         next: () => {
           this.cargarPersonal();
         this.mensaje = 'Personal de atención eliminado exitosamente.'; // NUEVO
+        setTimeout(() => this.mensaje = '', 5000);
+        return;
+
 
         },
         error: (err) => {

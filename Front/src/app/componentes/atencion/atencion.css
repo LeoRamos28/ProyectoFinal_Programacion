@@ -1,26 +1,26 @@
-/* .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1050;
-}
-.modal-content-centered {
-    background: white;
-    border-radius: 0.5rem;
-    max-width: 90%;
-    width: 600px;
-} */
 option[disabled] {
   color: #d9534f; /* rojo Bootstrap */
   font-weight: bold;
 }
 
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content-centered {
+  width: 600px;
+  border-radius: 0.5rem;
+  max-width: 90%;
+}
 
 
