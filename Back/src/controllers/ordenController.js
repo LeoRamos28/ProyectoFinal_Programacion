@@ -2,6 +2,8 @@ import OrdenTrabajo from '../models/OrdenTrabajo.js';
 import Usuario from '../models/Usuario.js'; 
 import Cliente from '../models/Cliente.js'; 
 import { Op } from 'sequelize';
+import db from '../config/database.js'; //Imports para el inventario del terrrrnico
+import { QueryTypes } from 'sequelize';
 
 const ID_ROL_ADMIN = 1; 
 const ESTADOS_PENDIENTES = ['asignada', 'en_proceso'];
@@ -50,53 +52,53 @@ export const getOrdenes = async (req, res) => {
 
 
 export const getOrdenesTecnico = async (req, res) => {
-        try {
-            const id_usuario_logueado = req.usuario.id;
-            const id_rol_logueado = req.usuario.id_rol; 
-    
-            let whereClause = {};
-    
-            // Logica para el Master/Admin (ver todo) vs Tecnico (ver solo lo suyo)
-            if (id_rol_logueado !== ID_ROL_ADMIN) {
-                // Si NO es Admin, filtra estrictamente por el ID del técnico.
-                whereClause.id_tecnico_asignado = id_usuario_logueado;
-            }
-            // El filtro de estado se aplica para ambos (Admin solo quiere ver las activas)
-            whereClause.estado = {
-                [Op.in]: ESTADOS_PENDIENTES
-            };
-            
-            const ordenesRaw = await OrdenTrabajo.findAll({
-                where: whereClause, 
-                include: [ 
-                    {
-                        model: Cliente,
-                        as: 'cliente',
-                        attributes: ['nombre', 'apellido']
-                    },
-                   
-                    {
-                        model: Usuario,
-                        as: 'tecnico',
-                        attributes: ['nombre', 'apellido']
-                    }
-                ],
-                order: [['fecha_asignacion', 'ASC']]
-            });
-            
-            const ordenes = ordenesRaw.map(o => ({
-                ...o.toJSON(),
-                cliente_nombre: o.cliente?.nombre || '',
-                cliente_apellido: o.cliente?.apellido || '',
-            }));
-    
-            res.json(ordenes);
-    
-        } catch (error) {
-            console.error('Error al listar órdenes del técnico/master:', error);
-            res.status(500).json({ error: 'Fallo interno al listar órdenes del técnico.' });
+    try {
+        const id_usuario_logueado = req.usuario.id;
+        const id_rol_logueado = req.usuario.id_rol; 
+
+        let whereClause = {};
+
+        // Logica para el Master/Admin (ver todo) vs Tecnico (ver solo lo suyo)
+        if (id_rol_logueado !== ID_ROL_ADMIN) {
+            // Si NO es Admin, filtra estrictamente por el ID del técnico.
+            whereClause.id_tecnico_asignado = id_usuario_logueado;
         }
-    };
+        // El filtro de estado se aplica para ambos (Admin solo quiere ver las activas)
+        whereClause.estado = {
+            [Op.in]: ESTADOS_PENDIENTES
+        };
+        
+        const ordenesRaw = await OrdenTrabajo.findAll({
+            where: whereClause, 
+            include: [ 
+                {
+                    model: Cliente,
+                    as: 'cliente',
+                    attributes: ['nombre', 'apellido']
+                },
+                
+                {
+                    model: Usuario,
+                    as: 'tecnico',
+                    attributes: ['nombre', 'apellido']
+                }
+            ],
+            order: [['fecha_asignacion', 'ASC']]
+        });
+        
+        const ordenes = ordenesRaw.map(o => ({
+            ...o.toJSON(),
+            cliente_nombre: o.cliente?.nombre || '',
+            cliente_apellido: o.cliente?.apellido || '',
+        }));
+
+        res.json(ordenes);
+
+    } catch (error) {
+        console.error('Error al listar órdenes del técnico/master:', error);
+        res.status(500).json({ error: 'Fallo interno al listar órdenes del técnico.' });
+    }
+};
     
 
 // 2. Obtener la carga de trabajo de los técnicos (GET /api/ordenes/carga-trabajo)
@@ -153,7 +155,7 @@ export const createOrden = async (req, res) => {
              return res.status(400).json({ error: "Faltan datos de la orden o el usuario logueado." });
         }
         
-                // Si se asigna un técnico, verifica su carga antes de crear la orden
+        // Si se asigna un técnico, verifica su carga antes de crear la orden
         if (id_tecnico_asignado) {
             const ordenesAsignadas = await OrdenTrabajo.count({
                 where: {
@@ -178,9 +180,6 @@ export const createOrden = async (req, res) => {
             direccion_trabajo,
             estado: estadoInicial,
             fecha_asignacion: fecha_asignacion || null 
-
-
-            
         });
 
         res.status(201).json({ 
@@ -199,7 +198,8 @@ export const createOrden = async (req, res) => {
 export const updateEstadoOrden = async (req, res) => {
     try {
         const { id } = req.params;
-        const { estado, solucion_reclamo } = req.body;
+        // Agregamos 'materiales' al destructuring del body
+        const { estado, solucion_reclamo, materiales } = req.body;
         const id_tecnico_logueado = req.usuario.id; 
 
         let estadoNormalizado = estado === 'completada' ? 'finalizada' : estado;
@@ -213,20 +213,55 @@ export const updateEstadoOrden = async (req, res) => {
 
         const datosAActualizar = { estado: estadoNormalizado };
 
+        //Estados
         if (estadoNormalizado === 'finalizada') {
+            
+            // 1. Validación de Solución
             if (!solucion_reclamo || solucion_reclamo.length < 5) {
                 return res.status(400).json({ 
                     error: "La solución del reclamo es obligatoria para finalizar la orden." 
                 });
             }
             datosAActualizar.solucion_reclamo = solucion_reclamo;
-            datosAActualizar.fecha_finalizacion = new Date();
-        }        
+            datosAActualizar.fecha_finalizacion = new Date(); // Usamos fecha actual de JS, Sequelize la formatea
+
+            // Solo procesamos si hay materiales y si el estado es finalizada
+            if (materiales && materiales.length > 0) {
+                try {
+                    for (const item of materiales) {
+                        // A) Insertar en materiales_usados
+                        await db.query(
+                            `INSERT INTO materiales_usados (id_orden, id_producto, cantidad_usada, fecha_registro) 
+                             VALUES (?, ?, ?, NOW())`,
+                            { 
+                                replacements: [id, item.id_producto, item.cantidad_usada],
+                                type: QueryTypes.INSERT
+                            }
+                        );
+
+                        // B) Descontar del inventario
+                        await db.query(
+                            `UPDATE inventario SET stock_actual = stock_actual - ? WHERE id_producto = ?`,
+                            { 
+                                replacements: [item.cantidad_usada, item.id_producto],
+                                type: QueryTypes.UPDATE
+                            }
+                        );
+                    }
+                } catch (invError) {
+                    console.error("Error al procesar inventario:", invError);
+                    // Opcional: Podrías hacer return res.status(500)... si quieres que falle todo si falla el stock
+                }
+            }
+        }       
+        
+        // --- Actualización de la oredn por Squelize
         const [filasActualizadas] = await OrdenTrabajo.update(
             datosAActualizar,
             { 
                 where: { 
                     id_orden: id,
+                    // Solo el técnico asignado puede cambiar su orden
                     id_tecnico_asignado: id_tecnico_logueado 
                 } 
             }
@@ -238,7 +273,7 @@ export const updateEstadoOrden = async (req, res) => {
             });
         }
         
-        res.json({ mensaje: "Estado de orden actualizado exitosamente." });
+        res.json({ mensaje: "Estado de orden actualizado exitosamente y stock descontado." });
 
     } catch (error) {
         console.error('Error al actualizar estado:', error);
