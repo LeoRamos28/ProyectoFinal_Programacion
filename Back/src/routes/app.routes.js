@@ -51,7 +51,7 @@ router.post("/ordenes", verificarToken, masterOrAtencion, createOrden);
 router.patch("/ordenes/:id", verificarToken, masterOrTecnico, updateEstadoOrden);
 
 // ------- Rutas usuarios -------
-router.get("/usuarios", verificarToken, getUsuarios);
+router.get("/usuarios", verificarToken, masterOrAtencion, getUsuarios);
 router.post("/usuarios", verificarToken, soloMaster, createUsuario);
 router.put("/usuarios/:id", verificarToken, soloMaster, updateUsuario);
 router.delete("/usuarios/:id", verificarToken, soloMaster, deleteUsuario);
@@ -64,6 +64,6 @@ router.post("/usuarios/register", registrar);
 router.get("/inventario", verificarToken, masterTecnicoAtencion, getInventario);
 router.post("/inventario", verificarToken, masterOrAtencion, crearItem);
 router.put("/inventario/:id", verificarToken, masterOrAtencion, actualizarItem);
-router.delete("/inventario/:id", verificarToken, soloMaster, eliminarItem); // Eliminar comentario cuando se haga la corrección de la protección a esta ruta
+router.delete("/inventario/:id", verificarToken, masterOrAtencion, eliminarItem); // Eliminar comentario cuando se haga la corrección de la protección a esta ruta
 
 export default router;

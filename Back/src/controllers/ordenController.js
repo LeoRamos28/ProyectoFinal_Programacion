@@ -9,6 +9,32 @@ const ID_ROL_ADMIN = 1;
 const ESTADOS_PENDIENTES = ['asignada', 'en_proceso'];
 
 
+
+/**
+ * @swagger
+ * /api/ordenes:
+ *   get:
+ *     summary: Listar todas las órdenes (filtrado por usuario de atención)
+ *     tags: [Órdenes de Trabajo]
+ *     parameters:
+ *       - in: query
+ *         name: id_usuario_atencion
+ *         schema:
+ *           type: integer
+ *         description: Filtrar órdenes por usuario de atención
+ *     responses:
+ *       200:
+ *         description: Lista de órdenes con clientes y técnicos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       500:
+ *         description: Fallo interno al listar órdenes
+ *     security:
+ *       - bearerAuth: []
+ */
 export const getOrdenes = async (req, res) => {
     try {
         const { id_usuario_atencion } = req.query;
@@ -50,6 +76,26 @@ export const getOrdenes = async (req, res) => {
     }
 };
 
+
+/**
+ * @swagger
+ * /api/ordenes/tecnico:
+ *   get:
+ *     summary: Órdenes asignadas al técnico logueado (o todas para Admin)
+ *     tags: [Órdenes de Trabajo]
+ *     responses:
+ *       200:
+ *         description: Órdenes pendientes del técnico logueado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       500:
+ *         description: Fallo interno al listar órdenes del técnico
+ *     security:
+ *       - bearerAuth: []
+ */
 
 export const getOrdenesTecnico = async (req, res) => {
     try {
@@ -102,6 +148,27 @@ export const getOrdenesTecnico = async (req, res) => {
     
 
 // 2. Obtener la carga de trabajo de los técnicos (GET /api/ordenes/carga-trabajo)
+
+/**
+ * @swagger
+ * /api/ordenes/carga-trabajo:
+ *   get:
+ *     summary: Carga de trabajo de todos los técnicos activos
+ *     tags: [Órdenes de Trabajo]
+ *     responses:
+ *       200:
+ *         description: Lista de técnicos con cantidad de órdenes pendientes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       500:
+ *         description: Fallo interno al obtener carga de trabajo
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const getTecnicosCarga = async (req, res) => {
     try {
         // Primero, obtener todos los usuarios que son técnicos (id_rol = 2)
@@ -135,6 +202,61 @@ export const getTecnicosCarga = async (req, res) => {
         res.status(500).json({ error: 'Fallo interno al obtener la carga de trabajo.' });
     }
 };
+
+/**
+ * @swagger
+ * /api/ordenes:
+ *   post:
+ *     summary: Crear nueva orden de trabajo
+ *     tags: [Órdenes de Trabajo]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_cliente
+ *               - tipo
+ *               - descripcion
+ *               - direccion_trabajo
+ *             properties:
+ *               id_cliente:
+ *                 type: integer
+ *                 example: 1
+ *               id_tecnico_asignado:
+ *                 type: integer
+ *                 example: 2
+ *               tipo:
+ *                 type: string
+ *                 example: "Instalación"
+ *               descripcion:
+ *                 type: string
+ *                 example: "Nueva instalación"
+ *               direccion_trabajo:
+ *                 type: string
+ *                 example: "Calle Falsa 123"
+ *               fecha_asignacion:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       201:
+ *         description: Orden creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 orden:
+ *       400:
+ *         description: Faltan datos obligatorios o técnico con carga máxima
+ *       500:
+ *         description: Fallo interno al crear orden
+ *     security:
+ *       - bearerAuth: []
+ */
 
 export const createOrden = async (req, res) => {
     try {
@@ -195,6 +317,50 @@ export const createOrden = async (req, res) => {
 
 
 // Actualizar estado de orden 
+
+/**
+ * @swagger
+ * /api/ordenes/{id}:
+ *   patch:
+ *     summary: Actualizar estado de orden (solo técnico asignado)
+ *     tags: [Órdenes de Trabajo]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la orden a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - estado
+ *             properties:
+ *               estado:
+ *                 type: string
+ *                 enum: ["en_proceso", "finalizada", "cancelada"]
+ *               solucion_reclamo:
+ *                 type: string
+ *                 example: "Reclamo resuelto instalando nuevo router"
+ *               materiales:
+ *                 type: array
+ *                 items:
+ *     responses:
+ *       200:
+ *         description: Estado actualizado y stock descontado exitosamente
+ *       400:
+ *         description: Estado inválido o datos faltantes
+ *       403:
+ *         description: Acceso denegado (no es el técnico asignado)
+ *       500:
+ *         description: Fallo interno al actualizar estado
+ *     security:
+ *       - bearerAuth: []
+ */
 export const updateEstadoOrden = async (req, res) => {
     try {
         const { id } = req.params;
