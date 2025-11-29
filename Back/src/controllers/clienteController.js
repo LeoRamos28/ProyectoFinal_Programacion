@@ -1,6 +1,26 @@
 import Cliente from '../models/Cliente.js'; 
 import { Op } from 'sequelize';
 
+/**
+ * @swagger
+ * /api/clientes:
+ *   get:
+ *     summary: Obtener lista de clientes
+ *     tags: [Clientes]
+ *     responses:
+ *       200:
+ *         description: Lista de clientes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       500:
+ *         description: Error interno del servidor al obtener clientes.
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const getClientes = async (req, res) => {
     try {
         // Listar todos los clientes
@@ -25,6 +45,65 @@ export const getClientes = async (req, res) => {
 };
 
 // Registra cliente
+
+/**
+ * @swagger
+ * /api/clientes:
+ *   post:
+ *     summary: Crear un nuevo cliente
+ *     tags: [Clientes]
+ *     requestBody:
+ *       description: Datos para crear un cliente
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre
+ *               - apellido
+ *               - dni
+ *               - provincia
+ *               - localidad
+ *               - direccion
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Juan"
+ *               apellido:
+ *                 type: string
+ *                 example: "Pérez"
+ *               dni:
+ *                 type: string
+ *                 example: "12345678"
+ *               provincia:
+ *                 type: string
+ *                 example: "Buenos Aires"
+ *               localidad:
+ *                 type: string
+ *                 example: "La Plata"
+ *               direccion:
+ *                 type: string
+ *                 example: "Calle Falsa 123"
+ *     responses:
+ *       201:
+ *         description: Cliente creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 cliente:
+ *       400:
+ *         description: Faltan campos obligatorios del cliente.
+ *       500:
+ *         description: Error interno del servidor al crear cliente.
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const createCliente = async (req, res) => {
     try {
         const { 
@@ -61,6 +140,36 @@ export const createCliente = async (req, res) => {
 };
 
 // Buscar cliente
+
+/**
+ * @swagger
+ * /api/clientes/buscar:
+ *   get:
+ *     summary: Buscar clientes por varios campos
+ *     tags: [Clientes]
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         description: Texto para buscar en nombre, apellido, dni, provincia, localidad y dirección
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de clientes que coinciden con la búsqueda.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       400:
+ *         description: No se proporcionó el dato de búsqueda.
+ *       500:
+ *         description: Fallo interno al buscar clientes.
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const buscarClientes = async (req, res) => {
     const { query } = req.query;
     if (!query || query.trim() === '') {
@@ -97,6 +206,31 @@ export const buscarClientes = async (req, res) => {
 };
 
 // Eliminar cliente
+
+
+/**
+ * @swagger
+ * /api/clientes/{id}:
+ *   delete:
+ *     summary: Eliminar un cliente por ID
+ *     tags: [Clientes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del cliente a eliminar
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Cliente eliminado correctamente
+ *       404:
+ *         description: Cliente no encontrado
+ *       500:
+ *         description: Error interno al eliminar cliente
+ *     security:
+ *       - bearerAuth: []
+ */
 export const deleteCliente = async (req, res) => {
   const { id } = req.params;
   try {
@@ -113,6 +247,66 @@ export const deleteCliente = async (req, res) => {
 };
 
 // Editar cliente
+
+/**
+ * @swagger
+ * /api/clientes/{id}:
+ *   put:
+ *     summary: Actualizar un cliente por ID
+ *     tags: [Clientes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del cliente a actualizar
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       description: Datos para actualizar el cliente
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Juan Carlos"
+ *               apellido:
+ *                 type: string
+ *                 example: "Pérez López"
+ *               dni:
+ *                 type: string
+ *                 example: "87654321"
+ *               provincia:
+ *                 type: string
+ *                 example: "Santa Fe"
+ *               localidad:
+ *                 type: string
+ *                 example: "Rosario"
+ *               direccion:
+ *                 type: string
+ *                 example: "Av. Siempre Viva 742"
+ *     responses:
+ *       200:
+ *         description: Cliente actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 cliente:
+ *       404:
+ *         description: Cliente no encontrado
+ *       500:
+ *         description: Error interno al actualizar cliente
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const updateCliente = async (req, res) => {
   const { id } = req.params;
   const { nombre, apellido, dni, provincia, localidad, direccion } = req.body;

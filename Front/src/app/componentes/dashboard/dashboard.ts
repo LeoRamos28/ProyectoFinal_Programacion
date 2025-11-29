@@ -23,7 +23,14 @@ export class DashboardComponent {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+  // Limpia TODO primero
+  localStorage.clear();
+  sessionStorage.clear();
+  
+  // Delay mínimo para que Angular procese
+  setTimeout(() => {
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }, 100);
+}
+
 }

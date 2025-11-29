@@ -4,7 +4,37 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { Op } from "sequelize"; // Necesario para consultas más flexibles si se requiere
 
+
+
 // Listar usuarios (General y Filtrado por Rol)
+
+/**
+ * @swagger
+ * /api/usuarios:
+ *   get:
+ *     summary: Listar usuarios (filtrado opcional por rol)
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: query
+ *         name: id_rol
+ *         schema:
+ *           type: integer
+ *           example: 2
+ *         description: Filtrar usuarios por id_rol
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *       500:
+ *         description: Error interno del servidor
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const getUsuarios = async (req, res) => {
     try {
         // 1. Obtener el filtro id_rol desde la query string (Ej: ?id_rol=3)
@@ -33,6 +63,68 @@ export const getUsuarios = async (req, res) => {
 
 
 // Registrar/Crear usuario (Utilizado para crear técnicos)
+
+/**
+ * @swagger
+ * /api/usuarios:
+ *   post:
+ *     summary: Crear usuario/registro de técnico (Solo Master)
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre
+ *               - apellido
+ *               - dni
+ *               - email
+ *               - id_rol
+ *               - password
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Carlos"
+ *               apellido:
+ *                 type: string
+ *                 example: "García"
+ *               dni:
+ *                 type: string
+ *                 example: "87654321"
+ *               email:
+ *                 type: string
+ *                 example: "carlos@fibra.com"
+ *               telefono:
+ *                 type: string
+ *                 example: "987654321"
+ *               id_rol:
+ *                 type: integer
+ *                 example: 2
+ *               password:
+ *                 type: string
+ *                 example: "Password123"
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 usuario:
+ *       400:
+ *         description: Faltan campos obligatorios
+ *       409:
+ *         description: Email o DNI ya registrados
+ *       500:
+ *         description: Error interno
+ *     security:
+ *       - bearerAuth: []
+ */
 export const createUsuario = async (req, res) => {
     try {
         console.log("DATOS RECIBIDOS PARA CREAR USUARIO/TÉCNICO:", req.body); // ⬅️ AGREGAR ESTO
@@ -82,6 +174,71 @@ export const createUsuario = async (req, res) => {
 };
 
 // Actualizar usuario (Utilizado para editar técnicos)
+
+/**
+ * @swagger
+ * /api/usuarios/{id}:
+ *   put:
+ *     summary: Actualizar usuario por ID (Solo Master)
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         required: true
+ *         description: ID del usuario a modificar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Carlos"
+ *               apellido:
+ *                 type: string
+ *                 example: "García"
+ *               dni:
+ *                 type: string
+ *                 example: "87654321"
+ *               email:
+ *                 type: string
+ *                 example: "carlos@fibra.com"
+ *               telefono:
+ *                 type: string
+ *                 example: "987654321"
+ *               id_rol:
+ *                 type: integer
+ *                 example: 2
+ *               estado:
+ *                 type: boolean
+ *                 example: true
+ *               password:
+ *                 type: string
+ *                 example: "Password123"
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 usuario:
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const updateUsuario = async (req, res) => {
     try {
         const { id } = req.params; // id_usuario
@@ -142,6 +299,60 @@ export const registrar = async (req, res) => {
 };
 
 // Login (Se mantiene igual)
+
+/**
+ * @swagger
+ * /api/usuarios/login:
+ *   post:
+ *     summary: Inicio de sesión
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "master@fibra.com"
+ *               password:
+ *                 type: string
+ *                 example: "TuPasswordMaster123"
+ *     responses:
+ *       200:
+ *         description: Login exitoso, devuelve token JWT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 usuario:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     email:
+ *                       type: string
+ *                     nombre:
+ *                       type: string
+ *                     id_rol:
+ *                       type: integer
+ *       400:
+ *         description: Email y contraseña son requeridos
+ *       401:
+ *         description: Credenciales inválidas
+ *       500:
+ *         description: Error interno del servidor
+ *     security: []
+ */
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body; 
@@ -189,6 +400,32 @@ export const login = async (req, res) => {
 
 
 // Eliminar usuario
+
+/**
+ * @swagger
+ * /api/usuarios/{id}:
+ *   delete:
+ *     summary: Eliminar usuario por ID (Solo Master)
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         required: true
+ *         description: ID del usuario a eliminar
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado con éxito
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno
+ *     security:
+ *       - bearerAuth: []
+ */
+
 export const deleteUsuario = async (req, res) => {
     try {
         const { id } = req.params; // id_usuario

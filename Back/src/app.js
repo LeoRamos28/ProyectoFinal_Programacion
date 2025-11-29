@@ -3,6 +3,8 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import sequelize from "./config/database.js";
 import appRoutes from "./routes/app.routes.js";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 import Rol from "./models/Rol.js"; 
 import Usuario from "./models/Usuario.js";
@@ -23,11 +25,53 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// ========================================================
+// CONFIGURACIÓN SWAGGER
+// ========================================================
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Infinet Fibra API',
+            version: '1.0.0',
+            description: 'API completa para gestión de clientes, usuarios, roles y órdenes de trabajo',
+            contact: {
+                name: 'Infinet Fibra',
+                email: 'admin@fibra.com'
+            }
+        },
+        servers: [{ url: 'http://localhost:3000' }] ,
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            }
+        }
+    },
+apis: ['./src/**/*.js']  // Escanea TODO
+
+};
+
+
+
+const specs = swaggerJsdoc(swaggerOptions);
+
+// ========================================================
+// RUTAS SWAGGER
+// ========================================================
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Infinet Fibra - API Docs"
+}));
+
 app.use("/api", appRoutes);
 
-// inicialización roles y master 
-
-
+// ========================================================
+// FUNCIONES INICIALIZACIÓN (sin cambios)
+// ========================================================
 async function inicializarRoles() {
     try {
         await Rol.findOrCreate({
@@ -89,6 +133,9 @@ sequelize.authenticate()
         await inicializarRoles();
         await crearMaster();
 
-        app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor en http://localhost:${PORT}`);
+            console.log(`📖 Swagger Docs: http://localhost:${PORT}/api-docs`);
+        });
     })
     .catch(err => console.error("❌ Error al conectar con la base de datos:", err));

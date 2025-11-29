@@ -99,10 +99,7 @@ export class AtencionClienteComponent implements OnInit {
         this.atencionService.createCliente(this.nuevoCliente).subscribe({
             next: (res: any) => { 
                 const clienteCreado = res.cliente; 
-                const idGenerado = clienteCreado?.id_cliente || 'DESCONOCIDO'; 
-                
-                
-            this.mensaje = `Cliente  ${clienteCreado.nombre}registrado con éxito.`;
+            this.mensaje = `Cliente registrado con éxito.`;
             setTimeout(() => this.mensaje = '', 8000);  
                 this.clientes.push(clienteCreado);
                 this.mostrarFormularioCliente = false;
@@ -160,9 +157,8 @@ guardarOrden(): void {
 
       const cliente = this.clientes.find(c => c.id_cliente === ordenCreada.id_cliente);
       ordenCreada.cliente_nombre = cliente ? `${cliente.nombre} ${cliente.apellido}` : 'Cliente desconocido';
-      const idGenerado = ordenCreada?.id_orden || 'DESCONOCIDO';
 
-      this.mensaje = `Orden #${idGenerado} creada y ${ordenCreada.estado}.`;
+      this.mensaje = `Orden creada y ${ordenCreada.estado}.`;
       setTimeout(() => this.mensaje = '', 8000);
 
       this.misOrdenes = [ordenCreada, ...this.misOrdenes];

@@ -11,7 +11,7 @@
 /* Contenedor de toda la pantalla */
 .login-wrapper {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-gray);
+  background: rgba(21, 25, 26, 0.959);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -21,7 +21,7 @@
 
 /* Tarjeta Central */
 .login-card {
-  background: white;
+  background: rgb(250, 248, 248);
   padding: 2.5rem 2rem;
   border-radius: 16px; /* Bordes redondeados */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Sombra */
@@ -52,7 +52,7 @@
 }
 
 .description {
-  color: #6b7280;
+  color: #000000;
   font-size: 0.9rem;
   font-weight: 400;
 }
@@ -90,12 +90,12 @@
 
 .form-control:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 4px rgba(58, 207, 113, 0.699); 
+  box-shadow: 0 0 0 4px rgba(19, 188, 255, 0.945); 
 }
 
 .form-control.is-invalid {
   border-color: var(--error-red);
-  background-color: #fef2f2;
+  background-color: rgb(250, 231, 231);
 }
 
 /* Mensajes de error */
@@ -110,7 +110,7 @@
 .btn-login {
   width: 100%;
   padding: 14px;
-  background-color: rgb(224, 219, 245); /* aca va verde corpo */
+  background-color: rgba(46, 165, 80, 1);
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 8px;
@@ -134,7 +134,7 @@
 }
 
 .btn-login:disabled {
-  background-color: rgba(188, 153, 245, 0.404);
+  background-color: rgb(38, 182, 79);
   cursor: not-allowed; 
   box-shadow: none;
 }
@@ -157,6 +157,14 @@
   color: var(--dark-green);
   text-decoration: underline;
 }
+
+.logo-with-bg {
+  background: rgba(20, 25, 26, 0.959);
+  padding: 8px 12px; 
+  border-radius: 8px;
+  display: inline-block;
+}
+
 
 /* Ajustes Responsive */
 @media (max-width: 480px) {

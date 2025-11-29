@@ -6,7 +6,7 @@
 
     <!-- Encabezado y botones -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="h4 m-0 text-primary">Atención al Cliente y Órdenes</h2>
+      <h2>Atención al Cliente y Órdenes</h2>
       <div class="d-flex">
         <button
           (click)="mostrarFormularioCliente = true"
@@ -152,7 +152,7 @@
           <button
             type="button"
             (click)="mostrarFormularioCliente = false"
-            class="btn btn-secondary me-2"
+            class="btn btn-danger me-2"
           >
             Cancelar
           </button>
@@ -258,11 +258,11 @@
           <button
             type="button"
             (click)="mostrarFormularioOrden = false"
-            class="btn btn-secondary me-2"
+            class="btn btn-danger me-2"
           >
             Cancelar
           </button>
-          <button type="submit" class="btn btn-primary">Crear Orden</button>
+          <button type="submit" class="btn btn-success">Crear Orden</button>
         </div>
       </form>
     </div>
