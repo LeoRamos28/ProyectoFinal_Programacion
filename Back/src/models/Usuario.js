@@ -9,53 +9,53 @@ const Usuario = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      field: "id_usuario"
+      field: "id_usuario",
     },
     nombre: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
     },
     apellido: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
     },
     dni: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      unique: true
+      unique: true,
     },
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     telefono: {
       type: DataTypes.STRING(20),
-      allowNull: true
+      allowNull: true,
     },
     id_rol: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     estado: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true
+      defaultValue: true,
     },
     creado_por: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
     },
     password: {
       type: DataTypes.STRING(255),
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
-    tableName: "usuarios",   // Nombre real de la tabla en la DB
-    timestamps: false        // NO usamos createdAt/updatedAt
+    tableName: "usuarios", // Nombre real de la tabla en la DB
+    timestamps: false, // NO usamos createdAt/updatedAt
   }
 );
 

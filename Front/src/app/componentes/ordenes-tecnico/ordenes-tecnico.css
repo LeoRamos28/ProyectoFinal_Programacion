@@ -1,0 +1,24 @@
+/* Colores de Estado (badges) */
+.card-asignada {
+  background-color: #2b9486;
+  color: white;
+}
+
+.card-en-proceso {
+  background-color: #e26c0ad7;
+  color: white;
+}
+
+.card-finalizada {
+  background-color: #1c9728;
+  color: white;
+}
+
+.card-cancelada {
+  background-color: #db3319;
+  color: white;
+}
+
+.badge-medium {
+  font-size: 0.85rem;
+}

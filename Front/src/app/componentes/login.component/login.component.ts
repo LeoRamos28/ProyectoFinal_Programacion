@@ -3,26 +3,22 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
-import { Router,RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -33,14 +29,14 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (res: any) => {
-            console.log('🔐 Token recibido del backend:', res.token); // 👈 VERIFICACIÓN
+        console.log('🔐 Token recibido del backend:', res.token); // 👈 VERIFICACIÓN
         if (res.token) {
           this.authService.setToken(res.token);
           Swal.fire({
             title: '¡Éxito!',
             text: 'Login realizado correctamente',
             icon: 'success',
-            confirmButtonText: 'Aceptar'
+            confirmButtonText: 'Aceptar',
           }).then(() => {
             this.router.navigate(['/dashboard']);
           });
@@ -51,9 +47,9 @@ export class LoginComponent {
           title: 'Error',
           text: err.error?.message || 'Usuario o contraseña incorrectos',
           icon: 'error',
-          confirmButtonText: 'Aceptar'
+          confirmButtonText: 'Aceptar',
         });
-      }
+      },
     });
   }
 }

@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {jwtDecode} from 'jwt-decode';
-
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   private baseUrl = 'http://localhost:3000/api/usuarios'; // URL base del backend
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // src/app/services/auth.service.ts (Modificado)
-  
+
   // Modificacion para login ingresar email y password
   login(email: string, password: string): Observable<any> {
-      const body = { email, password }; 
-      return this.http.post(`${this.baseUrl}/login`, body);
+    const body = { email, password };
+    return this.http.post(`${this.baseUrl}/login`, body);
   }
 
   setToken(token: string) {
@@ -37,11 +35,11 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-   getUserPayload(): any {
+  getUserPayload(): any {
     const token = this.getToken();
     if (!token) return null;
     try {
-      return jwt_decode(token); 
+      return jwt_decode(token);
     } catch {
       return null;
     }
@@ -64,4 +62,3 @@ function jwt_decode(token: string): any {
     return null;
   }
 }
-

@@ -10,13 +10,13 @@
       <div class="d-flex">
         <button
           (click)="mostrarFormularioCliente = true"
-          class="btn btn-success btn-sm rounded-pill px-4 me-2 shadow-sm"
+          class="btn btn-success btn-sm rounded-pill px-4 me-2 shadow-sm fw-bold"
         >
           + Registrar Cliente
         </button>
         <button
           (click)="abrirFormularioOrden()"
-          class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm"
+          class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm fw-bold"
           [disabled]="clientes.length === 0"
         >
           + Nueva Orden
@@ -49,25 +49,25 @@
             <td>{{ orden.cliente_nombre }}</td>
             <td>
               <span
-                class="badge"
-                [class.bg-info]="orden.tipo === 'instalacion'"
-                [class.bg-warning]="orden.tipo === 'reclamo'"
+                class="badge badge-medium"
+                [class.badge-instalacion]="orden.tipo === 'instalacion'"
+                [class.badge-reclamo]="orden.tipo === 'reclamo'"
               >
                 {{ orden.tipo | titlecase }}
               </span>
             </td>
             <td>{{ orden.tecnico_nombre || 'N/A' }}</td>
             <td>
-            <span
-              class="badge"
-              [class.bg-secondary]="orden.estado === 'pendiente'"
-              [class.bg-primary]="orden.estado === 'asignada'"
-              [class.bg-success]="orden.estado === 'finalizada'"
-              [class.bg-warning]="orden.estado === 'en_proceso'"
-              [class.bg-danger]="orden.estado === 'cancelada'"
-            >
-              {{ orden.estado | titlecase }}
-            </span>
+              <span
+                class="badge badge-medium"
+                [class.card-pendiente]="orden.estado === 'pendiente'"
+                [class.card-asignada]="orden.estado === 'asignada'"
+                [class.card-finalizada]="orden.estado === 'finalizada'"
+                [class.card-en-proceso]="orden.estado === 'en_proceso'"
+                [class.card-cancelada]="orden.estado === 'cancelada'"
+              >
+                {{ orden.estado | titlecase }}
+              </span>
             </td>
             <td>{{ orden.fecha_creacion | date : 'shortDate' }}</td>
           </tr>
@@ -152,11 +152,11 @@
           <button
             type="button"
             (click)="mostrarFormularioCliente = false"
-            class="btn btn-danger me-2"
+            class="btn btn-danger me-2 fw-bold"
           >
             Cancelar
           </button>
-          <button type="submit" class="btn btn-success">Guardar Cliente</button>
+          <button type="submit" class="btn btn-success fw-bold">Guardar Cliente</button>
         </div>
       </form>
     </div>
@@ -182,7 +182,7 @@
             >
               <option [value]="0" disabled>Seleccione un cliente...</option>
               <option *ngFor="let c of clientes" [ngValue]="c.id_cliente">
-                {{ c.nombre }} {{ c.apellido }} 
+                {{ c.nombre }} {{ c.apellido }}
               </option>
             </select>
           </div>
@@ -234,14 +234,15 @@
                 [ngValue]="t.id_usuario"
                 [disabled]="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES"
               >
-                {{ t.nombre }} {{ t.apellido }} - Carga: {{ t.ordenes_pendientes ?? 0 }}/{{ MAX_ORDENES_PENDIENTES }}
+                {{ t.nombre }} {{ t.apellido }} - Carga: {{ t.ordenes_pendientes ?? 0 }}/{{
+                  MAX_ORDENES_PENDIENTES
+                }}
                 <span *ngIf="(t.ordenes_pendientes ?? 0) >= MAX_ORDENES_PENDIENTES">
                   (SOBRECARGADO)
                 </span>
               </option>
             </select>
           </div>
-
         </div>
 
         <div class="col-md-6">
@@ -258,11 +259,11 @@
           <button
             type="button"
             (click)="mostrarFormularioOrden = false"
-            class="btn btn-danger me-2"
+            class="btn btn-danger me-2 fw-bold"
           >
             Cancelar
           </button>
-          <button type="submit" class="btn btn-success">Crear Orden</button>
+          <button type="submit" class="btn btn-success fw-bold">Crear Orden</button>
         </div>
       </form>
     </div>

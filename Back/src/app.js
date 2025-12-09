@@ -51,7 +51,7 @@ const swaggerOptions = {
             }
         }
     },
-apis: ['./src/**/*.js']  // Escanea TODO
+apis: ['./src/**/*.js'] 
 
 };
 

@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tecnico } from '../models/tecnico'; 
+import { Tecnico } from '../models/tecnico';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TecnicoService {
-
   private baseUrl = 'http://localhost:3000/api/usuarios';
 
-  private readonly ID_ROL_TECNICO = 2; 
+  private readonly ID_ROL_TECNICO = 2;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || ''; 
+    const token = localStorage.getItem('token') || '';
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 

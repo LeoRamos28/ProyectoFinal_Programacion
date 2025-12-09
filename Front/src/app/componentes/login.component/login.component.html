@@ -1,17 +1,13 @@
-
 <div class="login-wrapper">
   <div class="login-card" data-aos="fade-up">
-    
     <!-- Cabecera -->
     <div class="text-center">
-      
-    <img src="logo.png" alt="Logo" class="logo-with-bg">
+      <img src="logo.png" alt="Logo" class="logo-with-bg" />
       <p class="description">Accede a tu cuenta para gestionar tu red</p>
     </div>
 
     <!-- Formulario -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      
       <!-- Email -->
       <div class="form-group">
         <label for="email" class="form-label">Email</label>
@@ -24,7 +20,10 @@
           [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         />
         <!-- Mensaje de error -->
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-msg">
+        <div
+          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          class="error-msg"
+        >
           El email es obligatorio y debe ser válido.
         </div>
       </div>
@@ -38,25 +37,26 @@
           formControlName="password"
           placeholder="••••••••"
           class="form-control"
-          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          [class.is-invalid]="
+            loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+          "
         />
         <!-- Mensaje de error -->
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-msg">
+        <div
+          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="error-msg"
+        >
           La contraseña es obligatoria.
         </div>
       </div>
 
       <!-- Botón (Sin recordarme ni olvido de contraseña) -->
-      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">
-        Ingresar
-      </button>
-
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Ingresar</button>
     </form>
 
     <!-- Volver a landing -->
     <div class="footer-link">
       <a routerLink="/" class="back-link">← Volver al inicio</a>
     </div>
-
   </div>
 </div>

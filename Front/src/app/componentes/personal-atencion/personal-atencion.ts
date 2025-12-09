@@ -20,7 +20,7 @@ export interface PersonalAtencion {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './personal-atencion.html',
-  styleUrls: ['./personal-atencion.css']
+  styleUrls: ['./personal-atencion.css'],
 })
 export class PersonalAtencionComponent implements OnInit {
   personalAtencion: PersonalAtencion[] = [];
@@ -28,7 +28,6 @@ export class PersonalAtencionComponent implements OnInit {
   mostrarFormulario = false;
   errorMessage: string | null = null;
   mensaje: string = '';
-
 
   constructor(private atencionService: PersonalAtencionService) {}
 
@@ -43,8 +42,9 @@ export class PersonalAtencionComponent implements OnInit {
         this.personalAtencion = data;
       },
       error: (err: any) => {
-        this.errorMessage = 'Error al cargar el personal de atención. Verifique la conexión al backend y la autenticación.';
-      }
+        this.errorMessage =
+          'Error al cargar el personal de atención. Verifique la conexión al backend y la autenticación.';
+      },
     });
   }
 
@@ -59,7 +59,7 @@ export class PersonalAtencionComponent implements OnInit {
       telefono: '',
       estado: true,
       id_rol: 3,
-      password: ''
+      password: '',
     } as PersonalAtencion;
     this.mostrarFormulario = true;
   }
@@ -74,7 +74,10 @@ export class PersonalAtencionComponent implements OnInit {
     if (!this.atencionSeleccionado) return;
     this.errorMessage = null;
 
-    if (this.atencionSeleccionado.id_usuario === 0 && (!this.atencionSeleccionado.password || this.atencionSeleccionado.password.length === 0)) {
+    if (
+      this.atencionSeleccionado.id_usuario === 0 &&
+      (!this.atencionSeleccionado.password || this.atencionSeleccionado.password.length === 0)
+    ) {
       this.errorMessage = 'Debe ingresar una contraseña para crear un nuevo usuario.';
       return;
     }
@@ -86,15 +89,15 @@ export class PersonalAtencionComponent implements OnInit {
         next: () => {
           this.mostrarFormulario = false;
           this.cargarPersonal();
-        this.mensaje = 'Personal de atención creado exitosamente.'; // NUEVO
-        setTimeout(() => this.mensaje = '', 5000);
-        return;
+          this.mensaje = 'Personal de atención creado exitosamente.'; // NUEVO
+          setTimeout(() => (this.mensaje = ''), 5000);
+          return;
         },
         error: (err) => {
-          this.errorMessage = 'Error al crear: ' + (err.error?.error || 'Verifique los datos (DNI/Email duplicado).');
-        }
+          this.errorMessage =
+            'Error al crear: ' + (err.error?.error || 'Verifique los datos (DNI/Email duplicado).');
+        },
       });
-
     } else {
       const dataToUpdate = { ...this.atencionSeleccionado };
       if (dataToUpdate.password === '') {
@@ -106,13 +109,13 @@ export class PersonalAtencionComponent implements OnInit {
           this.mostrarFormulario = false;
           this.cargarPersonal();
           this.mensaje = 'Personal de atención actualizado exitosamente.'; // NUEVO
-          setTimeout(() => this.mensaje = '', 5000);
+          setTimeout(() => (this.mensaje = ''), 5000);
           return;
-
         },
         error: (err) => {
-          this.errorMessage = 'Error al actualizar: ' + (err.error?.error || 'Verifique los datos.');
-        }
+          this.errorMessage =
+            'Error al actualizar: ' + (err.error?.error || 'Verifique los datos.');
+        },
       });
     }
   }
@@ -123,15 +126,13 @@ export class PersonalAtencionComponent implements OnInit {
       this.atencionService.deletePersonal(id_usuario).subscribe({
         next: () => {
           this.cargarPersonal();
-        this.mensaje = 'Personal de atención eliminado exitosamente.'; // NUEVO
-        setTimeout(() => this.mensaje = '', 5000);
-        return;
-
-
+          this.mensaje = 'Personal de atención eliminado exitosamente.'; // NUEVO
+          setTimeout(() => (this.mensaje = ''), 5000);
+          return;
         },
         error: (err) => {
           this.errorMessage = 'Error al eliminar: ' + (err.error?.message || err.message);
-        }
+        },
       });
     }
   }

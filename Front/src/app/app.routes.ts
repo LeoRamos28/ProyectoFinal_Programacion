@@ -8,7 +8,7 @@ import { OrdenesTecnicoComponent } from './componentes/ordenes-tecnico/ordenes-t
 import { Clientes } from './componentes/clientes/clientes';
 import { PersonalAtencionComponent } from './componentes/personal-atencion/personal-atencion';
 import { InventarioComponent } from './componentes/inventario/inventario.component';
-
+import { MetricasComponent } from './componentes/metricas/metricas';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -19,14 +19,14 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     children: [
+      { path: 'metricas', component: MetricasComponent }, // NUEVO
       { path: 'tecnicos', component: TecnicoComponent },
       { path: 'personal-atencion', component: PersonalAtencionComponent }, // NUEVO
       { path: 'atencion', component: AtencionClienteComponent },
       { path: 'ordenes-tecnico', component: OrdenesTecnicoComponent },
       { path: 'clientes', component: Clientes },
       { path: 'inventario', component: InventarioComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
+      { path: '', redirectTo: 'metricas', pathMatch: 'full' },
+    ],
   },
-
 ];
