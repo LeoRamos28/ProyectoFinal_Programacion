@@ -1,0 +1,62 @@
+/* Colores para tarjeta Tecnico */
+.card-pendiente {
+  background-color: #b88d3e !important;
+}
+
+.card-asignada {
+  background-color: #60a1d6 !important;
+}
+
+.card-en-proceso {
+  background-color: #1b62b8 !important;
+}
+
+.card-finalizada {
+  background-color: #3aaf46 !important;
+}
+
+.card-cancelada {
+  background-color: #d1513e !important;
+}
+
+.card-reclamos {
+  background-color: #e67d00 !important;
+}
+
+/* Colores para tarjeta Admin */
+.color-clientes-activos {
+  background-color: #1b62b8 !important;
+}
+
+.color-reclamos-ventas {
+  background-color: #d1513e !important;
+}
+
+.color-solicitudes-pendientes {
+  background-color: #e67d00 !important;
+}
+
+.card-styled {
+  border-radius: 1rem;
+}
+.card-styled .card-title,
+.card-styled .display-6 {
+  color: white !important;
+}
+
+/* Colores para tarjeta Master */
+.color-clientes-activos {
+  background-color: #1b62b8 !important;
+}
+
+.color-usuarios-registrados {
+  background-color: #3aaf46 !important;
+}
+
+.color-ordenes-totales {
+  background-color: #60a1d6 !important;
+}
+
+.color-stock-bajo {
+  background-color: #e67d00 !important;
+}

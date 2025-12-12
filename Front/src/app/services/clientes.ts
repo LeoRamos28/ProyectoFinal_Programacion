@@ -13,7 +13,7 @@ export class ClientesService {
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -22,14 +22,15 @@ export class ClientesService {
   }
 
   buscarClientes(valor: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/buscar?query=${valor}`, { headers: this.getAuthHeaders() });
+    return this.http.get<any[]>(`${this.apiUrl}/buscar?query=${valor}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
-
   updateCliente(id: number, datos: any): Observable<any> {
-  return this.http.put<any>(`${this.apiUrl}/${id}`, datos, { headers: this.getAuthHeaders() });
-}
-deleteCliente(id: number): Observable<any> {
-  return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
-}
+    return this.http.put<any>(`${this.apiUrl}/${id}`, datos, { headers: this.getAuthHeaders() });
+  }
+  deleteCliente(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
 }

@@ -6,7 +6,10 @@
   <div class="card p-4 shadow-lg border-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>Gestión de Personal de Atención ☎️</h2>
-      <button (click)="agregarAtencion()" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">
+      <button
+        (click)="agregarAtencion()"
+        class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm fw-bold"
+      >
         + Nuevo Atención
       </button>
     </div>
@@ -34,21 +37,36 @@
             <td>{{ atencion.apellido }}</td>
             <td>{{ atencion.email }}</td>
             <td>
-              <span class="badge"
-                    [class.bg-success]="atencion.estado"
-                    [class.bg-danger]="!atencion.estado">
+              <span
+                class="badge fw-bold badge-medium"
+                [class.bg-success]="atencion.estado"
+                [class.bg-danger]="!atencion.estado"
+              >
                 {{ atencion.estado ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td>
-              <button (click)="editarAtencion(atencion)" class="btn btn-sm btn-warning me-2">Editar</button>
-              <button (click)="eliminarAtencion(atencion.id_usuario)" class="btn btn-sm btn-danger">Eliminar</button>
+              <button
+                (click)="editarAtencion(atencion)"
+                class="btn btn-sm btn-warning me-2 fw-bold"
+              >
+                Editar
+              </button>
+              <button
+                (click)="eliminarAtencion(atencion.id_usuario)"
+                class="btn btn-sm btn-danger fw-bold"
+              >
+                Eliminar
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div *ngIf="personalAtencion.length === 0" class="alert alert-info text-center mt-3 border-0 shadow-sm">
+      <div
+        *ngIf="personalAtencion.length === 0"
+        class="alert alert-info text-center mt-3 border-0 shadow-sm"
+      >
         No hay personal de atención registrado. Presiona "+ Nuevo Atención" para empezar.
       </div>
     </div>
@@ -64,31 +82,62 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label">Nombre:</label>
-            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.nombre" name="nombre" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.nombre"
+              name="nombre"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Apellido:</label>
-            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.apellido" name="apellido" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.apellido"
+              name="apellido"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Email:</label>
-            <input type="email" class="form-control" [(ngModel)]="atencionSeleccionado.email" name="email" required>
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.email"
+              name="email"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">DNI:</label>
-            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.dni" name="dni" required>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.dni"
+              name="dni"
+              required
+            />
           </div>
           <div class="col-12" *ngIf="atencionSeleccionado.id_usuario === 0">
             <label class="form-label">Contraseña:</label>
-            <input type="password"
-                   class="form-control"
-                   [(ngModel)]="atencionSeleccionado.password"
-                   name="password"
-                   required>
+            <input
+              type="password"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.password"
+              name="password"
+              required
+            />
           </div>
           <div class="col-md-6">
             <label class="form-label">Teléfono:</label>
-            <input type="text" class="form-control" [(ngModel)]="atencionSeleccionado.telefono" name="telefono">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="atencionSeleccionado.telefono"
+              name="telefono"
+            />
           </div>
           <div class="col-md-6 d-flex align-items-center pt-4">
             <label class="form-label me-3 mb-0">Estado:</label>
@@ -98,7 +147,8 @@
                 type="checkbox"
                 id="estadoSwitch"
                 [(ngModel)]="atencionSeleccionado.estado"
-                name="estado">
+                name="estado"
+              />
               <label class="form-check-label" for="estadoSwitch">
                 {{ atencionSeleccionado.estado ? 'Activo' : 'Inactivo' }}
               </label>
@@ -106,8 +156,14 @@
           </div>
         </div>
         <div class="mt-4 text-end">
-          <button type="button" (click)="mostrarFormulario = false" class="btn btn-danger me-2">Cancelar</button>
-          <button type="submit" class="btn btn-success">Guardar</button>
+          <button
+            type="button"
+            (click)="mostrarFormulario = false"
+            class="btn btn-danger me-2 fw-bold"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-success fw-bold">Guardar</button>
         </div>
       </form>
     </div>
