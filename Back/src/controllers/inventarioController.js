@@ -30,7 +30,7 @@ export const getInventario = async (req, res) => {
       "SELECT * FROM inventario WHERE activo = 1",
       {
         type: QueryTypes.SELECT,
-      }
+      },
     );
     res.json(results);
   } catch (error) {
@@ -110,7 +110,7 @@ export const crearItem = async (req, res) => {
           unidad_medida,
         ],
         type: QueryTypes.INSERT,
-      }
+      },
     );
 
     res.json({
@@ -197,7 +197,7 @@ export const actualizarItem = async (req, res) => {
           id,
         ],
         type: QueryTypes.UPDATE,
-      }
+      },
     );
 
     // 2. Obtener datos del producto actualizado
@@ -206,7 +206,7 @@ export const actualizarItem = async (req, res) => {
       {
         replacements: [id],
         type: QueryTypes.SELECT,
-      }
+      },
     );
 
     // 3. Manejar alertas según stock actual
@@ -214,31 +214,31 @@ export const actualizarItem = async (req, res) => {
       if (producto.stock_actual <= producto.stock_minimo) {
         // Crear alerta si no existe pendiente
         const [existe] = await db.query(
-          'SELECT id_alerta FROM alertas_stock WHERE id_producto = ? AND estado = "pendiente"',
+          "SELECT id_alerta FROM alertas_stock WHERE id_producto = ? AND estado = 'pendiente'",
           {
             replacements: [id],
             type: QueryTypes.SELECT,
-          }
+          },
         );
 
         if (!existe) {
           await db.query(
-            'INSERT INTO alertas_stock (id_producto, mensaje, fecha_alerta, estado) VALUES (?, ?, NOW(), "pendiente")',
+            "INSERT INTO alertas_stock (id_producto, mensaje, fecha_alerta, estado) VALUES (?, ?, NOW(), 'pendiente')",
             {
               replacements: [id, `Stock bajo: "${producto.nombre}"`],
               type: QueryTypes.INSERT,
-            }
+            },
           );
           console.log("ALERTA CREADA PARA PRODUCTO", id);
         }
       } else {
         // Resolver alerta si el stock está por encima del mínimo
         await db.query(
-          'UPDATE alertas_stock SET estado = "resuelta" WHERE id_producto = ? AND estado = "pendiente"',
+          "UPDATE alertas_stock SET estado = 'resuelta' WHERE id_producto = ? AND estado = 'pendiente'",
           {
             replacements: [id],
             type: QueryTypes.UPDATE,
-          }
+          },
         );
         console.log("ALERTA RESUELTA PARA PRODUCTO", id);
       }
@@ -305,8 +305,8 @@ export const eliminarItem = async (req, res) => {
 export const getAlertasStock = async (req, res) => {
   try {
     const results = await db.query(
-      'SELECT * FROM alertas_stock WHERE estado = "pendiente" ORDER BY fecha_alerta DESC',
-      { type: QueryTypes.SELECT }
+      "SELECT * FROM alertas_stock WHERE estado = 'pendiente' ORDER BY fecha_alerta DESC",
+      { type: QueryTypes.SELECT },
     );
     res.json(results);
   } catch (error) {
@@ -319,11 +319,11 @@ export const getAlertasStock = async (req, res) => {
 export const resolverAlerta = async (req, res) => {
   try {
     await db.query(
-      'UPDATE alertas_stock SET estado = "resuelta" WHERE id_alerta = ?',
+      "UPDATE alertas_stock SET estado = 'resuelta' WHERE id_alerta = ?",
       {
         replacements: [req.params.id],
         type: QueryTypes.UPDATE,
-      }
+      },
     );
     res.json({ message: "Alerta resuelta" });
   } catch (error) {

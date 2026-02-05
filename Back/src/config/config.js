@@ -12,5 +12,5 @@ export default {
   jwt: {
     secret: process.env.JWT_SECRET || "clave_por_defecto",
     expires: process.env.JWT_EXPIRES || "1h",
-  }
+  },
 };

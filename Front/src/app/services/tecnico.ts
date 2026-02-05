@@ -7,7 +7,7 @@ import { Tecnico } from '../models/tecnico';
   providedIn: 'root',
 })
 export class TecnicoService {
-   private baseUrl =
+  private baseUrl =
     window.location.hostname === 'localhost'
       ? 'http://localhost:3000/api/usuarios'
       : 'https://proyectofinal-programacion.onrender.com/api/usuarios';
