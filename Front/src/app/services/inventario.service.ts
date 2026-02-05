@@ -5,7 +5,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class InventarioService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : 'https://proyectofinal-programacion.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
@@ -43,7 +46,7 @@ export class InventarioService {
     return this.http.put(
       `${this.apiUrl}/alertas-stock/${id_alerta}/resolver`,
       {},
-      { headers: this.getHeaders() }
+      { headers: this.getHeaders() },
     );
   }
 }

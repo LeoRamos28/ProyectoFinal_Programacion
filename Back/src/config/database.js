@@ -1,17 +1,28 @@
-// database.js (versión mejorada)
 import { Sequelize } from "sequelize";
-import config from "./config.js";
 
-const sequelize = new Sequelize(
-  config.db.database,
-  config.db.user,
-  config.db.password,
-  {
-    host: config.db.host,
-    port: process.env.DB_PORT || 3306,
-    dialect: config.db.dialect,
-    logging: false, //Evita logs pesados en la consola
-  }
-);
+// En Render usamos DATABASE_URL, en local usamos tu config manual
+const connectionString = process.env.DATABASE_URL;
+
+const sequelize = connectionString 
+  ? new Sequelize(connectionString, {
+      dialect: 'mysql',
+      logging: false,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false // Crucial para que Aiven acepte la conexión de Render
+        }
+      }
+    })
+  : new Sequelize(
+      'tu_db_local', 
+      'root', 
+      'password', 
+      {
+        host: 'localhost',
+        dialect: 'mysql',
+        logging: false
+      }
+    );
 
 export default sequelize;

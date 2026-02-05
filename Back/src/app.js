@@ -14,14 +14,16 @@ import OrdenTrabajo from "./models/OrdenTrabajo.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración CORS
+// URL de tu frontend en Vercel (la obtendremos de una variable de entorno en Render)
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
+
+// ✅ Configuración CORS Dinámica
 const corsOptions = {
-    origin: 'http://localhost:4200', 
+    origin: FRONTEND_URL, // Permitirá localhost en tu PC y Vercel en la nube
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204
 };
-
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -35,12 +37,13 @@ const swaggerOptions = {
             title: 'Infinet Fibra API',
             version: '1.0.0',
             description: 'API completa para gestión de clientes, usuarios, roles y órdenes de trabajo',
-            contact: {
-                name: 'Infinet Fibra',
-                email: 'admin@fibra.com'
-            }
         },
-        servers: [{ url: 'http://localhost:3000' }] ,
+        servers: [
+            { 
+                // Detecta si está en Render o Local
+                url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}` 
+            }
+        ],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -51,10 +54,8 @@ const swaggerOptions = {
             }
         }
     },
-apis: ['./src/**/*.js'] 
-
+    apis: ['./src/**/*.js'] 
 };
-
 
 
 const specs = swaggerJsdoc(swaggerOptions);

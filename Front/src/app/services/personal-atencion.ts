@@ -5,7 +5,12 @@ import { PersonalAtencion } from '../componentes/personal-atencion/personal-aten
 
 @Injectable({ providedIn: 'root' })
 export class PersonalAtencionService {
-  private baseUrl = 'http://localhost:3000/api';
+    private baseUrl =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api/clientes'
+      : 'https://proyectofinal-programacion.onrender.com/api/clientes';
+
+
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token') || '';

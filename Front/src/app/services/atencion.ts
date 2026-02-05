@@ -9,7 +9,11 @@ import { Tecnico } from '../models/tecnico';
   providedIn: 'root',
 })
 export class AtencionService {
-  private baseUrl = 'http://localhost:3000/api';
+  // ✅ Usar la misma lógica de detección que en AuthService
+  private baseUrl = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'https://proyectofinal-programacion.onrender.com/api';
+
   private readonly ID_ROL_TECNICO = 2;
 
   constructor(private http: HttpClient) {}

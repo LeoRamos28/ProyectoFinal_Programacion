@@ -6,7 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MetricasService {
-  private apiUrl = 'http://localhost:3000/api';
+    private apiUrl =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : 'https://proyectofinal-programacion.onrender.com/api';
+
 
   constructor(private http: HttpClient) {}
 
