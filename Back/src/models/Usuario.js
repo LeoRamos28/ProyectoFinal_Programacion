@@ -1,4 +1,3 @@
-// models/Usuario.js
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
@@ -22,12 +21,12 @@ const Usuario = sequelize.define(
     dni: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      unique: true,
+      // Quitamos unique: true de aquí
     },
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true,
+      // Quitamos unique: true de aquí
       validate: {
         isEmail: true,
       },
@@ -54,8 +53,21 @@ const Usuario = sequelize.define(
     },
   },
   {
-    tableName: "usuarios", // Nombre real de la tabla en la DB
-    timestamps: false, // NO usamos createdAt/updatedAt
+    tableName: "usuarios",
+    timestamps: false,
+    // Agregamos esta sección de índices con nombres fijos
+    indexes: [
+      {
+        unique: true,
+        fields: ["dni"],
+        name: "idx_usuarios_dni_unique" 
+      },
+      {
+        unique: true,
+        fields: ["email"],
+        name: "idx_usuarios_email_unique"
+      }
+    ]
   }
 );
 
