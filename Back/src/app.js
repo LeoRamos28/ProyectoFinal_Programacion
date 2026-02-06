@@ -71,6 +71,10 @@ app.use(
 
 app.use("/api", appRoutes);
 
+app.get("/", (req, res) => {
+  res.send("API Infinet Fibra funcionando correctamente");
+});
+
 // ========================================================
 // FUNCIONES INICIALIZACIÓN
 // ========================================================
@@ -125,6 +129,7 @@ async function crearMaster() {
 // ========================================================
 // CONEXIÓN A BASE DE DATOS (SIN MODIFICAR TABLAS)
 // ========================================================
+
 sequelize
   .authenticate()
   .then(async () => {
