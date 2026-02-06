@@ -122,10 +122,19 @@ async function crearMaster() {
 // CONEXIÓN Y SINCRONIZACIÓN (Híbrida)
 // ========================================================
 // .sync({ alter: true }) crea las tablas en Aiven si no existen
+// ========================================================
+// CONEXIÓN A BASE DE DATOS (SIN MODIFICAR TABLAS)
+// ========================================================
 sequelize
-  .sync({ alter: true })
+  .authenticate()
   .then(async () => {
-    console.log("✅ Conexión exitosa y tablas sincronizadas.");
+    console.log("✅ Conexión exitosa a la base de datos.");
+
+    // Solo sincroniza en entorno local
+    if (process.env.NODE_ENV !== "production") {
+      await sequelize.sync();
+      console.log("🔧 Tablas sincronizadas en entorno local.");
+    }
 
     await inicializarRoles();
     await crearMaster();
