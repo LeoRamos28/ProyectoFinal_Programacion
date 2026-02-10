@@ -1,15 +1,18 @@
 <div class="login-wrapper">
   <div class="login-card" data-aos="fade-up">
-    <!-- Cabecera -->
     <div class="text-center">
-      <img src="logo.png" alt="Logo" class="logo-with-bg" />
-      <p class="description">Accede a tu cuenta para gestionar tu red</p>
+      <div class="logo-container mb-3">
+        <img
+          src="logo.png"
+          alt="Infinet Logo"
+          class="logo-with-bg"
+          style="max-height: 60px; width: auto"
+        />
+      </div>
     </div>
 
-    <!-- Formulario -->
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Email -->
-      <div class="form-group">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-4">
+      <div class="form-group mb-3">
         <label for="email" class="form-label">Email</label>
         <input
           id="email"
@@ -19,17 +22,15 @@
           class="form-control"
           [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         />
-        <!-- Mensaje de error -->
         <div
           *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
           class="error-msg"
         >
-          El email es obligatorio y debe ser válido.
+          <small>El email es obligatorio y debe ser válido.</small>
         </div>
       </div>
 
-      <!-- Password -->
-      <div class="form-group">
+      <div class="form-group mb-4">
         <label for="password" class="form-label">Contraseña</label>
         <input
           id="password"
@@ -41,22 +42,19 @@
             loginForm.get('password')?.invalid && loginForm.get('password')?.touched
           "
         />
-        <!-- Mensaje de error -->
         <div
           *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
           class="error-msg"
         >
-          La contraseña es obligatoria.
+          <small>La contraseña es obligatoria.</small>
         </div>
       </div>
 
-      <!-- Botón (Sin recordarme ni olvido de contraseña) -->
       <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Ingresar</button>
     </form>
 
-    <!-- Volver a landing -->
-    <div class="footer-link">
-      <a routerLink="/" class="back-link">← Volver al inicio</a>
+    <div class="footer-link mt-4">
+      <a routerLink="/" class="back-link"> <i class="bi bi-arrow-left"></i> Volver al inicio </a>
     </div>
   </div>
 </div>

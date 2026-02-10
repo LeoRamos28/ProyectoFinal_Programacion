@@ -6,20 +6,20 @@
 
     <!-- Encabezado y botones -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>Atención al Cliente y Órdenes</h2>
-      <div class="d-flex">
+      <!-- <h2>Atención al Cliente y Órdenes</h2> -->
+      <div class="d-flex gap-2 w-100 w-md-auto">
         <button
           (click)="mostrarFormularioCliente = true"
-          class="btn btn-success btn-sm rounded-pill px-4 me-2 shadow-sm fw-bold"
+          class="btn btn-success btn-sm rounded-pill px-3 flex-fill shadow-sm fw-bold"
         >
-          + Registrar Cliente
+          <i class="bi bi-person-plus-fill"></i> + Nuevo Cliente
         </button>
         <button
           (click)="abrirFormularioOrden()"
-          class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm fw-bold"
+          class="btn btn-primary btn-sm rounded-pill px-3 flex-fill shadow-sm fw-bold"
           [disabled]="clientes.length === 0"
         >
-          + Nueva Orden
+          <i class="bi bi-file-earmark-plus"></i> + Nueva Orden
         </button>
       </div>
     </div>
@@ -69,7 +69,7 @@
                 {{ orden.estado | titlecase }}
               </span>
             </td>
-            <td>{{ orden.fecha_creacion | date : 'shortDate' }}</td>
+            <td>{{ orden.fecha_creacion | date: 'shortDate' }}</td>
           </tr>
         </tbody>
       </table>

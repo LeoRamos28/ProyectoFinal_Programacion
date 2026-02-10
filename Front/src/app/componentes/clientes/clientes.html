@@ -1,106 +1,97 @@
-<!-- Buscador de clientes -->
-<div class="mb-3">
-  <input
-    class="form-control"
-    placeholder="Buscar cliente (por nombre, apellido, DNI, localidad...)"
-    [(ngModel)]="termino"
-  />
-  <button class="btn btn-primary mt-2 fw-bold" (click)="buscar()">Buscar</button>
+<div class="mb-4">
+  <div class="input-group shadow-sm">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Nombre, apellido, DNI, localidad..."
+      [(ngModel)]="termino"
+      (keyup.enter)="buscar()"
+    />
+    <button class="btn btn-primary fw-bold" (click)="buscar()">
+      <span class="d-none d-sm-inline">Buscar Cliente</span>
+      <span class="d-inline d-sm-none">🔍</span>
+    </button>
+  </div>
 </div>
 
-<!-- Mensaje informativo -->
-<div *ngIf="mensaje" class="alert alert-success text-center my-3">
-  {{ mensaje }}
+<div *ngIf="mensaje" class="alert alert-success text-center my-3 shadow-sm">
+  <i class="bi bi-check-circle-fill me-2"></i> {{ mensaje }}
 </div>
 
-<!-- Tabla de clientes si hay resultados -->
-<table class="table table-striped mt-3" *ngIf="clientes.length > 0">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>DNI</th>
-      <th>Provincia</th>
-      <th>Localidad</th>
-      <th>Dirección</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let c of clientes">
-      <ng-container *ngIf="editando === c.id_cliente; else verFila">
-        <!-- Fila editable -->
-        <td>
-          <label for="nombre{{ c.id_cliente }}" class="visually-hidden">Nombre</label>
-          <input
-            id="nombre{{ c.id_cliente }}"
-            [(ngModel)]="clienteEdit.nombre"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <label for="apellido{{ c.id_cliente }}" class="visually-hidden">Apellido</label>
-          <input
-            id="apellido{{ c.id_cliente }}"
-            [(ngModel)]="clienteEdit.apellido"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <label for="dni{{ c.id_cliente }}" class="visually-hidden">DNI</label>
-          <input id="dni{{ c.id_cliente }}" [(ngModel)]="clienteEdit.dni" class="form-control" />
-        </td>
-        <td>
-          <label for="provincia{{ c.id_cliente }}" class="visually-hidden">Provincia</label>
-          <input
-            id="provincia{{ c.id_cliente }}"
-            [(ngModel)]="clienteEdit.provincia"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <label for="localidad{{ c.id_cliente }}" class="visually-hidden">Localidad</label>
-          <input
-            id="localidad{{ c.id_cliente }}"
-            [(ngModel)]="clienteEdit.localidad"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <label for="direccion{{ c.id_cliente }}" class="visually-hidden">Dirección</label>
-          <input
-            id="direccion{{ c.id_cliente }}"
-            [(ngModel)]="clienteEdit.direccion"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <button class="btn btn-success btn-sm me-2 fw-bold" (click)="guardar()">Guardar</button>
-          <button class="btn btn-danger btn-sm fw-bold" (click)="cancelarEdicion()">
-            Cancelar
-          </button>
-        </td>
-      </ng-container>
-      <ng-template #verFila>
-        <!-- Fila normal -->
-        <td>{{ c.nombre }}</td>
-        <td>{{ c.apellido }}</td>
-        <td>{{ c.dni }}</td>
-        <td>{{ c.provincia }}</td>
-        <td>{{ c.localidad }}</td>
-        <td>{{ c.direccion }}</td>
-        <td>
-          <button class="btn btn-warning btn-sm me-2 fw-bold" (click)="editar(c)">Editar</button>
-          <button class="btn btn-danger btn-sm fw-bold" (click)="eliminar(c.id_cliente)">
-            Eliminar
-          </button>
-        </td>
-      </ng-template>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive card shadow-sm border-0" *ngIf="clientes.length > 0">
+  <table class="table table-hover align-middle mb-0">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>DNI</th>
+        <th class="d-none d-lg-table-cell">Provincia</th>
+        <th class="d-none d-lg-table-cell">Localidad</th>
+        <th class="d-none d-xl-table-cell">Dirección</th>
+        <th class="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientes">
+        <ng-container *ngIf="editando === c.id_cliente; else verFila">
+          <td><input [(ngModel)]="clienteEdit.nombre" class="form-control form-control-sm" /></td>
+          <td><input [(ngModel)]="clienteEdit.apellido" class="form-control form-control-sm" /></td>
+          <td><input [(ngModel)]="clienteEdit.dni" class="form-control form-control-sm" /></td>
+          <td class="d-none d-lg-table-cell">
+            <input [(ngModel)]="clienteEdit.provincia" class="form-control form-control-sm" />
+          </td>
+          <td class="d-none d-lg-table-cell">
+            <input [(ngModel)]="clienteEdit.localidad" class="form-control form-control-sm" />
+          </td>
+          <td class="d-none d-xl-table-cell">
+            <input [(ngModel)]="clienteEdit.direccion" class="form-control form-control-sm" />
+          </td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center gap-2">
+              <button
+                class="btn btn-success btn-sm shadow-sm fw-bold"
+                (click)="guardar()"
+                title="Guardar cambios"
+              >
+                <i class="bi bi-save"></i>
+                <span class="d-none d-md-inline ms-1 fw-bold">Guardar</span>
+              </button>
+              <button
+                class="btn btn-danger btn-sm shadow-sm fw-bold"
+                (click)="cancelarEdicion()"
+                title="Cancelar"
+              >
+                <i class="bi bi-x-lg">Cancelar</i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
 
-<!-- Mensaje si la lista está vacía -->
-<div *ngIf="clientes.length === 0 && mensaje === ''" class="alert alert-info text-center">
-  No hay clientes para mostrar.
+        <ng-template #verFila>
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.apellido }}</td>
+          <td>{{ c.dni }}</td>
+          <td class="d-none d-lg-table-cell">{{ c.provincia }}</td>
+          <td class="d-none d-lg-table-cell">{{ c.localidad }}</td>
+          <td class="d-none d-xl-table-cell small">{{ c.direccion }}</td>
+          <td class="text-center">
+            <div class="btn-group">
+              <button class="btn btn-warning btn-sm me-2 fw-bold" (click)="editar(c)">
+                <span class="d-none d-md-inline">Editar</span>
+                <span class="d-inline d-md-none">✏️</span>
+              </button>
+              <button class="btn btn-danger btn-sm fw-bold" (click)="eliminar(c.id_cliente)">
+                <span class="d-none d-md-inline">Borrar</span>
+                <span class="d-inline d-md-none">🗑️</span>
+              </button>
+            </div>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="clientes.length === 0 && mensaje === ''" class="alert alert-info text-center shadow-sm">
+  <i class="bi bi-info-circle me-2"></i> No hay clientes que coincidan con la búsqueda.
 </div>

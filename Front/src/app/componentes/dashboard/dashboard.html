@@ -3,64 +3,122 @@
   rel="stylesheet"
 />
 
-<div class="container-fluid home-container">
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark px-4 py-2">
-    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
-      <img src="logo.png" alt="Logo" />
-      <span class="text-white fw-bold"></span>
-    </a>
-    <div class="navbar-links d-flex gap-2">
-      <button class="btn btn-outline-danger btn-sm fw-bold" routerLink="/landing">
-        Cerrar sesion
-      </button>
+<div class="container-fluid home-container p-0">
+  <nav class="navbar navbar-dark bg-dark px-2 py-2">
+    <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
+      <div class="d-flex align-items-center gap-2">
+        <button
+          class="btn btn-dark d-md-none border-secondary p-1"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMobile"
+        >
+          <span class="navbar-toggler-icon" style="width: 20px; height: 20px"></span>
+        </button>
+
+        <a class="navbar-brand d-flex align-items-center m-0" routerLink="/">
+          <img src="logo.png" alt="Logo" class="dashboard-logo" />
+        </a>
+      </div>
+
+      <div class="navbar-links">
+        <button class="btn btn-outline-danger fw-bold px-2 py-1" routerLink="/landing">
+          <span class="d-none d-sm-inline">Cerrar sesión</span>
+          <span class="d-inline d-sm-none">Salir</span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- Sidebar  -->
-  <div class="row">
-    <aside class="col-md-3 bg-light p-4 border-end min-vh-100">
+  <div class="row g-0">
+    <aside class="col-md-3 bg-light p-4 border-end min-vh-100 d-none d-md-block">
       <h5 class="mb-4 text-primary">Menú principal</h5>
-      <ul class="nav flex-column gap-2">
-        <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2 || rolUsuario === 3">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/metricas">📰Dashboard</a>
-        </li>
-        <!--<li class="nav-item"><a class="nav-link text-dark fw-semibold" routerLink="/ventas">🛒 Ventas</a></li> Queda por si las moscas-->
-        <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/clientes">👥 Clientes</a>
-        </li>
-        <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/atencion">
-            ☎ Personal Atencion Cliente</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="rolUsuario === 1">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/tecnicos">🔧 Técnicos</a>
-        </li>
-        <li class="nav-item" *ngIf="rolUsuario === 1">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/personal-atencion"
-            >☎ Personal Ventas</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/ordenes-tecnico"
-            >🏗️ Ordenes-Reclamos</a
-          >
-        </li>
-        <!--<li class="nav-item"><a class="nav-link text-dark fw-semibold" routerLink="/reclamos">📢 Reclamos</a></li> Queda por si las moscas-->
-        <li class="nav-item" *ngIf="rolUsuario === 1">
-          <a class="nav-link text-dark fw-semibold" routerLink="/dashboard/inventario"
-            >📦 Inventario</a
-          >
-        </li>
-        <!--<li class="nav-item"><a class="nav-link text-dark fw-semibold" routerLink="/facturacion">💳 Facturación</a></li> Queda por si las moscas-->
-        <!--<li class="nav-item"><a class="nav-link text-dark fw-semibold" routerLink="/usuarios">🧑 Usuarios</a></li> Queda por si las moscas-->
-        <!--<li class="nav-item"><a class="nav-link text-dark fw-semibold" routerLink="/reportes">📊 Reportes</a></li> Queda por si las moscas-->
-      </ul>
+      <ng-container *ngTemplateOutlet="menuContent"></ng-container>
     </aside>
 
-    <main class="col-md-9 p-5 bg-white">
+    <div
+      class="offcanvas offcanvas-start bg-light"
+      tabindex="-1"
+      id="sidebarMobile"
+      aria-labelledby="sidebarMobileLabel"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-primary" id="sidebarMobileLabel">Menú principal</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ng-container *ngTemplateOutlet="menuContent"></ng-container>
+      </div>
+    </div>
+
+    <main class="col-12 col-md-9 p-3 p-md-5 bg-white">
       <router-outlet></router-outlet>
     </main>
   </div>
 </div>
+
+<ng-template #menuContent>
+  <ul class="nav flex-column gap-2">
+    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2 || rolUsuario === 3">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/metricas"
+        data-bs-dismiss="offcanvas"
+        >📰 Dashboard</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/clientes"
+        data-bs-dismiss="offcanvas"
+        >👥 Clientes</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/atencion"
+        data-bs-dismiss="offcanvas"
+        >☎ Atencion Cliente</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/tecnicos"
+        data-bs-dismiss="offcanvas"
+        >🔧 Técnicos</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/personal-atencion"
+        data-bs-dismiss="offcanvas"
+        >☎ Personal Ventas</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/ordenes-tecnico"
+        data-bs-dismiss="offcanvas"
+        >🏗️ Ordenes-Reclamos</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="rolUsuario === 1">
+      <a
+        class="nav-link text-dark fw-semibold"
+        routerLink="/dashboard/inventario"
+        data-bs-dismiss="offcanvas"
+        >📦 Inventario</a
+      >
+    </li>
+  </ul>
+</ng-template>

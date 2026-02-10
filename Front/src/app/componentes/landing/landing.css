@@ -1,31 +1,41 @@
-/* =============================================
- * LANDING PAGE 
- * ============================================= */
-
-/* General */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: #f9fafb; 
-  color: #374151; 
+  background: #f9fafb;
+  color: #374151;
+  overflow-x: hidden;
 }
 
-/* Navbar */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .navbar {
-  background: #212529; 
-  padding: 15px 20px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  background: #212529;
+  padding: 25px 0; 
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .navbar-content {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
+  max-width: 100%;
+  padding: 0 20px; 
+  margin: 0;
+  gap: 15px;
+}
+
+.logo {
+  max-width: 220px;
+  max-height: 60px;
 }
 
 .nav-links {
   display: flex;
-  justify-content: flex-end;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -38,41 +48,43 @@ body {
   padding: 10px 20px;
   border-radius: 8px;
   transition: background 0.3s ease;
-}
-
-.nav-links a:hover {
-  background: #b91c1c; 
+  white-space: nowrap;
 }
 
 .login-button {
-  background: #cf280b; 
+  background: #cf280b;
 }
 
+.nav-links a:hover,
 .login-button:hover {
-  background: #b91c1c; 
+  background: #b91c1c;
 }
 
-/* Hero Principal */
 .hero {
-  padding: 50px 20px;
+  padding-top: 60px; 
+  padding-bottom: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
   text-align: center;
 }
 
 .hero h1 {
   font-family: 'Playfair Display', serif;
   color: #0e93bb;
-  font-size: 2.8rem;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  margin-top: 0;
   margin-bottom: 15px;
+  line-height: 1.2;
 }
 
 .hero p {
+  width: 90%;
   max-width: 600px;
   margin: 0 auto 40px;
-  font-size: 1.2rem;
-  color: #000000; 
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: #000000;
 }
 
-/* Grid de Tarjetas */
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -81,26 +93,26 @@ body {
   margin: 0 auto;
 }
 
-/* Tarjetas */
 .benefit-item {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .benefit-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .icon {
   font-size: 2.5rem;
-  display: block;
-  margin-bottom: 10px;
-  color: #15803d; 
+  margin-bottom: 15px;
+  color: #15803d;
 }
 
 .benefit-item h3 {
@@ -111,10 +123,14 @@ body {
 
 .benefit-item p {
   font-size: 0.95rem;
-  color: #000000;
+  color: #374151;
+  line-height: 1.5;
 }
 
-/* Responsive */
+/* =============================================
+   RESPONSIVE - MEDIA QUERIES
+   ============================================= */
+
 @media (max-width: 900px) {
   .benefits-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -124,6 +140,30 @@ body {
 @media (max-width: 600px) {
   .benefits-grid {
     grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+
+  .hero {
+    padding-top: 15px; 
+    padding-bottom: 40px;
   }
 }
 
+@media (max-width: 480px) {
+  .navbar {
+    padding: 20px 0; 
+  }
+
+  .navbar-content {
+    padding: 0 10px;
+  }
+
+  .logo {
+    max-width: 120px;
+  }
+
+  .nav-links a {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}

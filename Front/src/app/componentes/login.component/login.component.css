@@ -1,65 +1,51 @@
-/* Importamos poppins para la tipografia */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-green: #15803d; /* verde corporativo */
-  --dark-green: #14532d; /* Verd oscuro para hover */
-  --error-red: #dc2626; /* ERrores */
-  --bg-gray: #f3f4f6;
+  --primary-green: #15803d;
+  --dark-green: #14532d;
+  --error-red: #dc2626;
 }
 
-/* Contenedor de toda la pantalla */
 .login-wrapper {
   font-family: 'Poppins', sans-serif;
-  background: rgba(21, 25, 26, 0.959);
+  background: rgba(21, 25, 26, 0.96);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
-/* Tarjeta Central */
 .login-card {
-  background: rgb(250, 248, 248);
+  background: #fafafa;
   padding: 2.5rem 2rem;
-  border-radius: 16px; /* Bordes redondeados */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Sombra */
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 400px;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Tipografía */
 .text-center {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .brand-title {
-  color: #15803d;
+  color: var(--primary-green);
   font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -0.5px;
-}
-
-.subtitle {
-  color: #1f2937;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem 0;
+  margin-bottom: 0.5rem;
 }
 
 .description {
-  color: #000000;
+  color: #4b5563;
   font-size: 0.9rem;
-  font-weight: 400;
 }
 
-/* Inputs y Labels */
+/* Formulario */
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-label {
@@ -83,7 +69,6 @@
   outline: none;
 }
 
-/* Efectos para los inputs */
 .form-control::placeholder {
   color: #9ca3af;
 }
@@ -98,15 +83,13 @@
   background-color: rgb(250, 231, 231);
 }
 
-/* Mensajes de error */
 .error-msg {
   color: var(--error-red);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   margin-top: 0.4rem;
   font-weight: 500;
 }
 
-/* Botón */
 .btn-login {
   width: 100%;
   padding: 14px;
@@ -139,7 +122,14 @@
   box-shadow: none;
 }
 
-/* Link Volver */
+.logo-with-bg {
+  background: #14191a;
+  padding: 10px 15px;
+  border-radius: 10px;
+  max-height: 70px;
+  width: auto;
+}
+
 .footer-link {
   text-align: center;
   margin-top: 2rem;
@@ -150,28 +140,18 @@
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: color 0.2s;
 }
 
-.back-link:hover {
-  color: var(--dark-green);
-  text-decoration: underline;
-}
-
-.logo-with-bg {
-  background: rgba(20, 25, 26, 0.959);
-  padding: 8px 12px;
-  border-radius: 8px;
-  display: inline-block;
-}
-
-/* Ajustes Responsive */
 @media (max-width: 480px) {
   .login-card {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.25rem;
   }
 
   .brand-title {
     font-size: 1.75rem;
+  }
+
+  .btn-login {
+    padding: 16px;
   }
 }
