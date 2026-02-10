@@ -60,3 +60,51 @@
 .color-stock-bajo {
   background-color: #e67d00 !important;
 }
+
+/* Ajustes adicionales para móvil */
+@media (max-width: 767.98px) {
+  .card-styled .card-title {
+    font-size: 1rem !important; 
+  }
+  .card-styled .display-6 {
+    font-size: 1.5rem !important; 
+  }
+}
+
+@media (min-width: 992px) {
+  .animate-in {
+    max-width: 1000px; 
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.d-md-none .card {
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.d-md-none .card:active {
+  transform: scale(0.98);
+  background-color: #f8f9fa;
+}
+
+.btn {
+  border-radius: 10px; 
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+.btn-primary {
+  box-shadow: 0 4px 12px rgba(27, 98, 184, 0.3);
+}
+
+.btn-danger {
+  box-shadow: 0 4px 12px rgba(209, 81, 62, 0.3);
+}

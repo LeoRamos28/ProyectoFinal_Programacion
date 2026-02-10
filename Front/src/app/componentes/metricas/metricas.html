@@ -67,19 +67,19 @@
           o.estado === 'pendiente'
             ? verOrdenesTecnicoPendientes()
             : o.estado === 'en_proceso'
-            ? verOrdenesTecnicoEnProceso()
-            : o.estado === 'asignada'
-            ? verOrdenesTecnicoAsignadas()
-            : o.estado === 'cancelada'
-            ? verOrdenesTecnicoCanceladas()
-            : verOrdenesTecnicoFinalizadas()
+              ? verOrdenesTecnicoEnProceso()
+              : o.estado === 'asignada'
+                ? verOrdenesTecnicoAsignadas()
+                : o.estado === 'cancelada'
+                  ? verOrdenesTecnicoCanceladas()
+                  : verOrdenesTecnicoFinalizadas()
         "
         [ngClass]="{
           'card-pendiente': o.estado === 'pendiente',
           'card-en-proceso': o.estado === 'en_proceso',
           'card-cancelada': o.estado === 'cancelada',
           'card-asignada': o.estado === 'asignada',
-          'card-finalizada': o.estado === 'finalizada' || o.estado === 'completada'
+          'card-finalizada': o.estado === 'finalizada' || o.estado === 'completada',
         }"
         style="cursor: pointer"
       >
@@ -147,259 +147,524 @@
     </div>
   </div>
   <!-- DETALLES MASTER -->
-  <div *ngIf="tarjetaSeleccionada === 'clientes'" class="mt-4">
-    <h4>Clientes activos</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Provincia</th>
-          <th>Localidad</th>
-          <th>Fecha alta</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let c of detalleClientes">
-          <td>{{ c.id_cliente }}</td>
-          <td>{{ c.nombre }} {{ c.apellido }}</td>
-          <td>{{ c.provincia }}</td>
-          <td>{{ c.localidad }}</td>
-          <td>{{ c.fecha_alta | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div *ngIf="tarjetaSeleccionada === 'clientes'" class="mt-4 animate-in">
+    <h4 class="mb-3">Clientes Activos</h4>
 
-  <div *ngIf="tarjetaSeleccionada === 'usuarios'" class="mt-4">
-    <h4>Usuarios registrados</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let u of detalleUsuarios">
-          <td>{{ u.id_usuario }}</td>
-          <td>{{ u.nombre }} {{ u.apellido }}</td>
-          <td>{{ u.email }}</td>
-          <td>{{ u.rol?.nombre || u.id_rol }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Provincia</th>
+            <th>Localidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of detalleClientes">
+            <td>{{ c.id_cliente }}</td>
+            <td class="fw-bold">{{ c.nombre }} {{ c.apellido }}</td>
+            <td>{{ c.provincia }}</td>
+            <td>{{ c.localidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
+    <div class="d-md-none">
+      <div
+        *ngFor="let c of detalleClientes"
+        class="card mb-3 shadow-sm border-start border-primary border-4"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-light text-dark border">ID #{{ c.id_cliente }}</span>
+            <small class="text-muted">{{ c.fecha_alta | date: 'shortDate' }}</small>
+          </div>
+          <h5 class="card-title mb-1">{{ c.nombre }} {{ c.apellido }}</h5>
+          <p class="card-text mb-0 text-muted">
+            <i class="bi bi-geo-alt-fill me-1"></i> {{ c.localidad }}, {{ c.provincia }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="tarjetaSeleccionada === 'usuarios'" class="mt-4 animate-in">
+    <h4 class="mb-3">Usuarios registrados</h4>
+
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of detalleUsuarios">
+            <td>{{ u.id_usuario }}</td>
+            <td class="fw-bold">{{ u.nombre }} {{ u.apellido }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+              <span class="badge bg-secondary">{{ u.rol?.nombre || u.id_rol }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      <div *ngFor="let u of detalleUsuarios" class="card mb-2 shadow-sm border-0 bg-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-0 fw-bold">{{ u.nombre }} {{ u.apellido }}</h6>
+              <small class="text-muted">{{ u.email }}</small>
+            </div>
+            <span class="badge bg-info text-dark">{{ u.rol?.nombre || u.id_rol }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- TABLA -->
-  <div *ngIf="tarjetaSeleccionada === 'stock'" class="mt-4">
-    <h4>Items con stock bajo</h4>
+  <div *ngIf="tarjetaSeleccionada === 'stock'" class="mt-4 animate-in">
+    <h4 class="mb-3 text-dark"><i class="bi bi-graph-down-arrow"></i> Alerta de Stock</h4>
 
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Stock actual</th>
-          <th>Stock mínimo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of detalleStock">
-          <td>{{ s.id_producto }}</td>
-          <td>{{ s.nombre }}</td>
-          <td>{{ s.stock_actual }}</td>
-          <td>{{ s.stock_minimo }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Producto</th>
+            <th>Stock Actual</th>
+            <th>Mínimo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of detalleStock">
+            <td>{{ s.id_producto }}</td>
+            <td class="fw-bold">{{ s.nombre }}</td>
+            <td class="text-danger fw-bold">{{ s.stock_actual }}</td>
+            <td>{{ s.stock_minimo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      <div
+        *ngFor="let s of detalleStock"
+        class="card mb-2 shadow-sm border-start border-danger border-4"
+      >
+        <div class="card-body py-2">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h6 class="mb-0">{{ s.nombre }}</h6>
+              <small class="text-muted">Mínimo requerido: {{ s.stock_minimo }}</small>
+            </div>
+            <div class="col-4 text-end">
+              <span class="h5 mb-0 text-danger fw-bold">{{ s.stock_actual }}</span>
+              <div class="small text-muted">unid.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
   <!-- ORDENES TOTALES -->
-  <div *ngIf="tarjetaSeleccionada === 'ordenesTotales'" class="mt-4">
-    <h4>Todas las órdenes del sistema</h4>
-
-    <!-- FILTROS -->
-    <div class="row mb-3">
-      <div class="col-md-3">
-        <label class="form-label">Filtrar por tipo:</label>
-        <select class="form-select" [(ngModel)]="filtroTipo" (change)="aplicarFiltros()">
-          <option value="">Todos</option>
-          <option value="instalacion">Instalación</option>
-          <option value="reclamo">Reclamo</option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label">Filtrar por estado:</label>
-        <select class="form-select" [(ngModel)]="filtroEstado" (change)="aplicarFiltros()">
-          <option value="">Todos</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="asignada">Asignada</option>
-          <option value="en_proceso">En proceso</option>
-          <option value="finalizada">Finalizada</option>
-          <option value="cancelada">Cancelada</option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label">Buscar por cliente:</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Nombre o apellido"
-          [(ngModel)]="filtroCliente"
-          (input)="aplicarFiltros()"
-        />
+  <div *ngIf="tarjetaSeleccionada === 'ordenesTotales'" class="mt-4 animate-in">
+    <div class="card shadow-sm mb-4 p-3 border-0 bg-light">
+      <div class="row g-2">
+        <div class="col-12 col-md-4">
+          <select class="form-select" [(ngModel)]="filtroTipo" (change)="aplicarFiltros()">
+            <option value="">Todos los tipos</option>
+            <option value="instalacion">Instalación</option>
+            <option value="reclamo">Reclamo</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar cliente..."
+            [(ngModel)]="filtroCliente"
+            (input)="aplicarFiltros()"
+          />
+        </div>
+        <div class="col-12 col-md-4 text-md-end text-center d-grid d-md-block">
+          <span class="badge bg-primary p-2">Total: {{ detalleOrdenesFiltrado.length }}</span>
+        </div>
       </div>
     </div>
 
-    <!-- TABLA ORDENES -->
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let o of detalleOrdenesFiltrado">
-          <td>{{ o.id_orden }}</td>
-          <td>{{ o.cliente?.nombre }} {{ o.cliente?.apellido }}</td>
-          <td>{{ o.tipo }}</td>
-          <td>{{ o.estado }}</td>
-          <td>{{ o.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of detalleOrdenesFiltrado">
+            <td>{{ o.id_orden }}</td>
+            <td>{{ o.cliente?.nombre }} {{ o.cliente?.apellido }}</td>
+            <td>{{ o.tipo }}</td>
+            <td>
+              <span class="badge rounded-pill bg-light text-dark border">{{ o.estado }}</span>
+            </td>
+            <td>{{ o.fecha_creacion | date: 'shortDate' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
+    <div class="d-md-none">
+      <div *ngFor="let o of detalleOrdenesFiltrado" class="card mb-3 shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <small class="text-muted">#ORD-{{ o.id_orden }}</small>
+            <span
+              class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill"
+              >{{ o.estado }}</span
+            >
+          </div>
+          <h6 class="mb-1">{{ o.cliente?.nombre }} {{ o.cliente?.apellido }}</h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem">{{
+              o.tipo
+            }}</small>
+            <small class="text-muted">{{ o.fecha_creacion | date: 'dd/MM/yyyy' }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- DETALLES TÉCNICO -->
-  <div *ngIf="tarjetaSeleccionada === 'ordenesTecnico'" class="mt-4">
-    <h4>Órdenes del técnico</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let o of detalleOrdenesTecnico">
-          <td>{{ o.id_orden }}</td>
-          <td>{{ o.tipo }}</td>
-          <td>{{ o.estado }}</td>
-          <td>{{ o.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="tarjetaSeleccionada === 'ordenesTecnico'" class="mt-4 animate-in">
+    <h4 class="mb-3 d-flex align-items-center">
+      <span class="p-2 bg-success rounded-circle me-2" style="width: 10px; height: 10px"></span>
+      Órdenes del técnico
+    </h4>
+
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha creación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of detalleOrdenesTecnico">
+            <td>{{ o.id_orden }}</td>
+            <td class="fw-bold">{{ o.tipo }}</td>
+            <td>
+              <span
+                class="badge rounded-pill px-3"
+                [ngClass]="{
+                  'bg-primary': o.estado === 'en_proceso',
+                  'bg-success': o.estado === 'finalizada',
+                  'bg-info': o.estado === 'asignada',
+                  'bg-danger': o.estado === 'cancelada',
+                }"
+              >
+                {{ o.estado }}
+              </span>
+            </td>
+            <td>{{ o.fecha_creacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-md-none">
+      <div
+        *ngFor="let o of detalleOrdenesTecnico"
+        class="card mb-3 shadow-sm border-0 border-start border-4 animate-in"
+        [ngClass]="{
+          'border-primary': o.estado === 'en_proceso',
+          'border-success': o.estado === 'finalizada',
+          'border-info': o.estado === 'asignada',
+          'border-danger': o.estado === 'cancelada',
+        }"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <small class="text-muted d-block">ID #{{ o.id_orden }}</small>
+              <span class="fw-bold fs-5 text-dark">{{ o.tipo }}</span>
+            </div>
+
+            <span
+              class="badge rounded-pill px-2 py-1"
+              [ngClass]="{
+                'bg-primary': o.estado === 'en_proceso',
+                'bg-success': o.estado === 'finalizada',
+                'bg-info': o.estado === 'asignada',
+                'bg-danger': o.estado === 'cancelada',
+              }"
+            >
+              {{ o.estado }}
+            </span>
+          </div>
+
+          <div class="mt-2 pt-2 border-top">
+            <small class="text-muted">
+              <i class="bi bi-calendar-event me-1"></i>
+              {{ o.fecha_creacion | date: 'mediumDate' }}
+              <i class="bi bi-clock ms-2 me-1"></i>
+              {{ o.fecha_creacion | date: 'shortTime' }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="tarjetaSeleccionada === 'ordenesTecnicoPendientes'" class="mt-4 animate-in">
+    <h4 class="mb-3 d-flex align-items-center text-dark">
+      <span class="p-2 bg-danger rounded-circle me-2" style="width: 10px; height: 10px"></span>
+      Órdenes pendientes
+    </h4>
+
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of detalleOrdenesTecnicoPendientes">
+            <td>{{ o.id_orden }}</td>
+            <td class="fw-bold text-uppercase small">{{ o.tipo }}</td>
+            <td class="text-muted small text-truncate" style="max-width: 250px">
+              {{ o.descripcion }}
+            </td>
+            <td>
+              <span class="badge bg-warning text-dark">{{ o.estado }}</span>
+            </td>
+            <td class="small">{{ o.fecha_creacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      <div
+        *ngFor="let o of detalleOrdenesTecnicoPendientes"
+        class="card mb-3 shadow-sm border-0 border-start border-primary border-4"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="fw-bold">#{{ o.id_orden }}</span>
+            <span class="badge bg-warning text-dark">{{ o.estado }}</span>
+          </div>
+          <h6 class="text-uppercase small fw-bold mb-1">{{ o.tipo }}</h6>
+          <p class="card-text small text-secondary mb-2">{{ o.descripcion }}</p>
+          <div class="text-end border-top pt-2">
+            <small class="text-muted"
+              ><i class="bi bi-clock me-1"></i>{{ o.fecha_creacion | date: 'dd/MM HH:mm' }}</small
+            >
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div *ngIf="tarjetaSeleccionada === 'ordenesTecnicoPendientes'" class="mt-4">
-    <h4>Órdenes pendientes del técnico</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tipo</th>
-          <th>Descripción</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let o of detalleOrdenesTecnicoPendientes">
-          <td>{{ o.id_orden }}</td>
-          <td>{{ o.tipo }}</td>
-          <td>{{ o.descripcion }}</td>
-          <td>{{ o.estado }}</td>
-          <td>{{ o.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div *ngIf="tarjetaSeleccionada === 'reclamosTecnico'" class="mt-4 animate-in">
+    <h4 class="mb-3 d-flex align-items-center text-dark">
+      <span class="p-2 bg-danger rounded-circle me-2" style="width: 10px; height: 10px"></span>
+      Reclamos pendientes
+    </h4>
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of detalleReclamosTecnico">
+            <td>{{ r.id_orden }}</td>
+            <td class="fw-bold text-uppercase small">{{ r.tipo }}</td>
+            <td class="text-muted small text-truncate" style="max-width: 250px">
+              {{ r.descripcion }}
+            </td>
+            <td>
+              <span class="badge bg-danger">{{ r.estado }}</span>
+            </td>
+            <td class="small">{{ r.fecha_creacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div *ngIf="tarjetaSeleccionada === 'reclamosTecnico'" class="mt-4">
-    <h4>Reclamos del técnico</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tipo</th>
-          <th>Descripción</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let r of detalleReclamosTecnico">
-          <td>{{ r.id_orden }}</td>
-          <td>{{ r.tipo }}</td>
-          <td>{{ r.descripcion }}</td>
-          <td>{{ r.estado }}</td>
-          <td>{{ r.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="d-md-none">
+      <div
+        *ngFor="let r of detalleReclamosTecnico"
+        class="card mb-3 shadow-sm border-0 border-start border-danger border-4"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="fw-bold text-danger">RECLAMO #{{ r.id_orden }}</span>
+            <span class="badge bg-danger">{{ r.estado }}</span>
+          </div>
+          <h6 class="text-uppercase small fw-bold mb-1">{{ r.tipo }}</h6>
+          <p class="card-text small text-dark mb-2">{{ r.descripcion }}</p>
+          <div class="text-end border-top pt-2 text-muted small">
+            {{ r.fecha_creacion | date: 'mediumDate' }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
   <!-- DETALLES ATENCIÓN -->
-  <div *ngIf="tarjetaSeleccionada === 'reclamosAtencion'" class="mt-4">
-    <h4>Reclamos abiertos</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Descripción</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let r of detalleReclamosAtencion">
-          <td>{{ r.id_orden }}</td>
-          <td>{{ r.cliente?.nombre }} {{ r.cliente?.apellido }}</td>
-          <td>{{ r.descripcion }}</td>
-          <td>{{ r.tipo }}</td>
-          <td>{{ r.estado }}</td>
-          <td>{{ r.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="tarjetaSeleccionada === 'reclamosAtencion'" class="mt-4 animate-in">
+    <h4 class="mb-3 d-flex align-items-center">
+      <span class="p-2 bg-danger rounded-circle me-2" style="width: 10px; height: 10px"></span>
+      Reclamos abiertos
+    </h4>
+
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of detalleReclamosAtencion">
+            <td>{{ r.id_orden }}</td>
+            <td class="fw-bold">{{ r.cliente?.nombre }} {{ r.cliente?.apellido }}</td>
+            <td class="small text-muted text-truncate" style="max-width: 250px">
+              {{ r.descripcion }}
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border">{{ r.tipo }}</span>
+            </td>
+            <td>
+              <span
+                class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle"
+                >{{ r.estado }}</span
+              >
+            </td>
+            <td class="small">{{ r.fecha_creacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      <div *ngFor="let r of detalleReclamosAtencion" class="card mb-3 shadow-sm border-0 bg-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="mb-0 fw-bold text-dark">
+              {{ r.cliente?.nombre }} {{ r.cliente?.apellido }}
+            </h6>
+            <span class="badge bg-danger-subtle text-danger">ID #{{ r.id_orden }}</span>
+          </div>
+          <p
+            class="card-text small text-muted mb-3 border-start ps-2"
+            style="border-color: #dc3545 !important"
+          >
+            {{ r.descripcion }}
+          </p>
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+            <span class="small fw-bold text-uppercase text-secondary">{{ r.tipo }}</span>
+            <small class="text-muted">{{ r.fecha_creacion | date: 'dd/MM HH:mm' }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div *ngIf="tarjetaSeleccionada === 'solicitudesPendientes'" class="mt-4">
-    <h4>Solicitudes pendientes</h4>
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Descripción</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Fecha creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of detalleSolicitudesPendientes">
-          <td>{{ s.id_orden }}</td>
-          <td>{{ s.cliente?.nombre }} {{ s.cliente?.apellido }}</td>
-          <td>{{ s.descripcion }}</td>
-          <td>{{ s.tipo }}</td>
-          <td>{{ s.estado }}</td>
-          <td>{{ s.fecha_creacion | date : 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="tarjetaSeleccionada === 'solicitudesPendientes'" class="mt-4 animate-in">
+    <h4 class="mb-3 d-flex align-items-center">
+      <span class="p-2 bg-warning rounded-circle me-2" style="width: 10px; height: 10px"></span>
+      Solicitudes pendientes
+    </h4>
+
+    <div class="d-none d-md-block shadow-sm rounded-3 border overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of detalleSolicitudesPendientes">
+            <td>{{ s.id_orden }}</td>
+            <td class="fw-bold">{{ s.cliente?.nombre }} {{ s.cliente?.apellido }}</td>
+            <td class="small text-muted text-truncate" style="max-width: 250px">
+              {{ s.descripcion }}
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border">{{ s.tipo }}</span>
+            </td>
+            <td>
+              <span
+                class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning-subtle"
+                >{{ s.estado }}</span
+              >
+            </td>
+            <td class="small">{{ s.fecha_creacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      <div
+        *ngFor="let s of detalleSolicitudesPendientes"
+        class="card mb-3 shadow-sm border-0 bg-white"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="mb-0 fw-bold text-dark">
+              {{ s.cliente?.nombre }} {{ s.cliente?.apellido }}
+            </h6>
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning"
+              >#{{ s.id_orden }}</span
+            >
+          </div>
+          <p class="card-text small text-muted mb-3">
+            {{ s.descripcion }}
+          </p>
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-tag small me-1"></i>
+              <span class="small fw-bold text-uppercase">{{ s.tipo }}</span>
+            </div>
+            <small class="text-muted">{{ s.fecha_creacion | date: 'dd/MM/yy' }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

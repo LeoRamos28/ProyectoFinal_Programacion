@@ -1,37 +1,58 @@
-/* Fondo oscuro que cubre toda la pantalla */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparente */
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* Por encima de todo */
+  z-index: 2000;
 }
 
-/* La tarjeta blanca centrada */
 .modal-content-centered {
   background: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px; /* Ancho máximo */
-  max-height: 90vh;
-  overflow-y: auto; /* Scroll si es muy alto */
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 95vh;
+  overflow-y: auto;
   position: relative;
-  animation: fadeIn 0.3s ease-out;
+  animation: slideUp 0.3s ease-out;
 }
 
+@media (max-width: 576px) {
+  .modal-content-centered {
+    margin: 10px;
+    padding: 1.5rem !important;
+  }
 
-@keyframes fadeIn {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .x-small {
+    font-size: 0.75rem;
+  }
+}
+
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.table-responsive {
+  border: none;
 }

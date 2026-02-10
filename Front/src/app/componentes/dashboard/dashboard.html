@@ -4,26 +4,27 @@
 />
 
 <div class="container-fluid home-container p-0">
-  <nav class="navbar navbar-dark bg-dark px-2 py-2">
+  <nav class="navbar navbar-dark bg-dark sticky-top shadow-sm px-2">
     <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
       <div class="d-flex align-items-center gap-2">
         <button
-          class="btn btn-dark d-md-none border-secondary p-1"
+          class="btn btn-outline-light d-md-none p-1 border-0"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#sidebarMobile"
         >
-          <span class="navbar-toggler-icon" style="width: 20px; height: 20px"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
 
-        <a class="navbar-brand d-flex align-items-center m-0" routerLink="/">
+        <a class="navbar-brand d-flex align-items-center m-0" routerLink="/dashboard/metricas">
           <img src="logo.png" alt="Logo" class="dashboard-logo" />
         </a>
       </div>
 
       <div class="navbar-links">
-        <button class="btn btn-outline-danger fw-bold px-2 py-1" routerLink="/landing">
-          <span class="d-none d-sm-inline">Cerrar sesión</span>
+        <button class="btn btn-logout fw-bold px-3 py-1" routerLink="/landing">
+          <i class="bi bi-box-arrow-right"></i>
+          <span class="d-none d-sm-inline ms-1">Cerrar sesión</span>
           <span class="d-inline d-sm-none">Salir</span>
         </button>
       </div>
@@ -31,9 +32,14 @@
   </nav>
 
   <div class="row g-0">
-    <aside class="col-md-3 bg-light p-4 border-end min-vh-100 d-none d-md-block">
-      <h5 class="mb-4 text-primary">Menú principal</h5>
-      <ng-container *ngTemplateOutlet="menuContent"></ng-container>
+    <aside
+      class="col-md-3 col-lg-2 bg-light border-end min-vh-100 d-none d-md-block sticky-top"
+      style="top: 56px; height: calc(100vh - 56px)"
+    >
+      <div class="p-4">
+        <h6 class="text-uppercase text-muted small fw-bold mb-3">Menú principal</h6>
+        <ng-container *ngTemplateOutlet="menuContent"></ng-container>
+      </div>
     </aside>
 
     <div
@@ -41,84 +47,101 @@
       tabindex="-1"
       id="sidebarMobile"
       aria-labelledby="sidebarMobileLabel"
+      style="width: 280px"
     >
-      <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title text-primary" id="sidebarMobileLabel">Menú principal</h5>
+      <div class="offcanvas-header border-bottom bg-dark text-white">
+        <h5 class="offcanvas-title h6 fw-bold" id="sidebarMobileLabel">NAVEGACIÓN</h5>
         <button
           type="button"
-          class="btn-close"
+          class="btn-close btn-close-white"
           data-bs-dismiss="offcanvas"
           aria-label="Close"
         ></button>
       </div>
-      <div class="offcanvas-body">
+      <div class="offcanvas-body p-3">
         <ng-container *ngTemplateOutlet="menuContent"></ng-container>
       </div>
     </div>
 
-    <main class="col-12 col-md-9 p-3 p-md-5 bg-white">
-      <router-outlet></router-outlet>
+    <main class="col-12 col-md-9 col-lg-10 bg-white">
+      <div class="p-3 p-md-4">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 </div>
 
 <ng-template #menuContent>
-  <ul class="nav flex-column gap-2">
-    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2 || rolUsuario === 3">
+  <ul class="nav flex-column gap-1">
+    <li class="nav-item" *ngIf="[1, 2, 3].includes(rolUsuario)">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/metricas"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >📰 Dashboard</a
       >
+        <span class="icon">📰</span> Dashboard
+      </a>
     </li>
-    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
+    <li class="nav-item" *ngIf="[1, 3].includes(rolUsuario)">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/clientes"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >👥 Clientes</a
       >
+        <span class="icon">👥</span> Clientes
+      </a>
     </li>
-    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 3">
+    <li class="nav-item" *ngIf="[1, 3].includes(rolUsuario)">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/atencion"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >☎ Atencion Cliente</a
       >
+        <span class="icon">☎️</span> Atención Cliente
+      </a>
     </li>
     <li class="nav-item" *ngIf="rolUsuario === 1">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/tecnicos"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >🔧 Técnicos</a
       >
+        <span class="icon">🔧</span> Técnicos
+      </a>
     </li>
     <li class="nav-item" *ngIf="rolUsuario === 1">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/personal-atencion"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >☎ Personal Ventas</a
       >
+        <span class="icon">💼</span> Personal Ventas
+      </a>
     </li>
-    <li class="nav-item" *ngIf="rolUsuario === 1 || rolUsuario === 2">
+    <li class="nav-item" *ngIf="[1, 2].includes(rolUsuario)">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/ordenes-tecnico"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >🏗️ Ordenes-Reclamos</a
       >
+        <span class="icon">🏗️</span> Órdenes / Reclamos
+      </a>
     </li>
     <li class="nav-item" *ngIf="rolUsuario === 1">
       <a
-        class="nav-link text-dark fw-semibold"
+        class="nav-link"
         routerLink="/dashboard/inventario"
+        routerLinkActive="active-link"
         data-bs-dismiss="offcanvas"
-        >📦 Inventario</a
       >
+        <span class="icon">📦</span> Inventario
+      </a>
     </li>
   </ul>
 </ng-template>
